@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Sparkles, Download } from "lucide-react"
+import Link from "next/link"
 
 export function NewsSection() {
   const [activeTab, setActiveTab] = useState("estudiantes")
@@ -24,6 +25,7 @@ export function NewsSection() {
         description:
           "Estimada comunidad educativa, les compartimos la nómina de estudiantes beneficiarios del transporte escolar año 2023. El proceso de postulación se realizó hasta el 30 de diciembre de 2022.",
         image: "/images/noticia-transporte.png",
+        link: "/noticias/transporte-escolar-2023",
         content: `Estimada comunidad educativa, junto con saludarles y esperando se encuentren en perfectas condiciones, les compartimos la nómina de estudiantes beneficiarios del transporte escolar año 2023.
 
 Cabe destacar que el proceso de postulación se realizó hasta el día 30 de diciembre de 2022, por tanto el proceso de postulación se encuentra cerrado.
@@ -149,13 +151,25 @@ Cualquier duda o consulta respecto del proceso y el comienzo del beneficio, por 
                 )}
 
                 <div className="flex flex-col space-y-2">
-                  <Button
-                    variant="ghost"
-                    className="text-[#039b9e] hover:text-[#028a8e] p-0 group-hover:translate-x-2 transition-transform duration-300 justify-start"
-                  >
-                    Ver noticia completa{" "}
-                    <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
-                  </Button>
+                  {item.link ? (
+                    <Link href={item.link}>
+                      <Button
+                        variant="ghost"
+                        className="text-[#039b9e] hover:text-[#028a8e] p-0 group-hover:translate-x-2 transition-transform duration-300 justify-start"
+                      >
+                        Ver noticia completa{" "}
+                        <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
+                      </Button>
+                    </Link>
+                  ) : (
+                    <Button
+                      variant="ghost"
+                      className="text-[#039b9e] hover:text-[#028a8e] p-0 group-hover:translate-x-2 transition-transform duration-300 justify-start"
+                    >
+                      Ver noticia completa{" "}
+                      <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
+                    </Button>
+                  )}
 
                   {item.hasDownload && (
                     <Button size="sm" className="bg-[#039b9e] hover:bg-[#028a8e] text-xs">
@@ -170,13 +184,15 @@ Cualquier duda o consulta respecto del proceso y el comienzo del beneficio, por 
         </div>
 
         <div className="text-center mt-12 animate-fade-in delay-1000">
-          <Button
-            size="lg"
-            variant="outline"
-            className="border-[#039b9e] text-[#039b9e] hover:bg-[#039b9e] hover:text-white transition-all duration-300 hover:scale-105 hover:shadow-lg bg-transparent"
-          >
-            Ver todas las noticias
-          </Button>
+          <Link href="/noticias">
+            <Button
+              size="lg"
+              variant="outline"
+              className="border-[#039b9e] text-[#039b9e] hover:bg-[#039b9e] hover:text-white transition-all duration-300 hover:scale-105 hover:shadow-lg bg-transparent"
+            >
+              Ver todas las noticias
+            </Button>
+          </Link>
         </div>
       </div>
     </section>

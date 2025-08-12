@@ -72,8 +72,16 @@ export function Hero() {
           <div className="relative animate-fade-in-up delay-500">
             <div className="bg-white/15 backdrop-blur-sm rounded-2xl p-8 space-y-6 hover:bg-white/25 transition-all duration-500 hover:scale-105 border border-white/20">
               <div className="text-center">
-                <div className="w-24 h-24 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full mx-auto mb-4 flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow duration-300">
-                  <div className="text-2xl font-bold text-white">ECD</div>
+                <div className="w-24 h-24 bg-gradient-to-br from-yellow-400/20 to-orange-500/20 rounded-full mx-auto mb-4 flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow duration-300 backdrop-blur-sm border border-white/20">
+                  <div className="relative w-16 h-16">
+                    <Image
+                      src="/images/logo-oficial.png"
+                      alt="Logo Escuela Municipal Campos Deportivos"
+                      fill
+                      style={{ objectFit: "contain" }}
+                      className="drop-shadow-lg"
+                    />
+                  </div>
                 </div>
                 <h3 className="text-xl font-semibold">Educación de Calidad</h3>
                 <p className="text-blue-100">Formando líderes del futuro</p>
