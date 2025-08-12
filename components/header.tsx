@@ -5,6 +5,7 @@ import Link from "next/link"
 import { Menu, X, Phone, Mail, Facebook, Youtube, ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import Image from "next/image"
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -40,9 +41,17 @@ export function Header() {
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <Link href="/" className="flex items-center space-x-3 hover:scale-105 transition-transform duration-300">
-              <div className="relative w-16 h-16 bg-gradient-to-br from-[#039b9e] to-[#028a8e] rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow duration-300">
-                <span className="text-white font-bold text-lg">ECD</span>
-                <div className="absolute inset-0 bg-white/20 rounded-full animate-pulse"></div>
+              <div className="relative w-16 h-16 rounded-full overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <Image
+                  src="/images/escuela-exterior.jpg"
+                  alt="Logo Escuela Campos Deportivos"
+                  fill
+                  style={{ objectFit: "cover" }}
+                  className="rounded-full"
+                />
+                <div className="absolute inset-0 bg-[#039b9e]/80 rounded-full flex items-center justify-center">
+                  <span className="text-white font-bold text-lg">ECD</span>
+                </div>
               </div>
               <div>
                 <h1 className="text-xl font-bold text-slate-800 hover:text-[#039b9e] transition-colors duration-300">

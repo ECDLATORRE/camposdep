@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { Facebook, Youtube, Mail, Phone, MapPin } from "lucide-react"
+import Image from "next/image"
 
 export function Footer() {
   return (
@@ -9,9 +10,17 @@ export function Footer() {
           {/* School Info */}
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
-              <div className="relative w-16 h-16 bg-gradient-to-br from-[#039b9e] to-[#028a8e] rounded-full flex items-center justify-center shadow-lg">
-                <span className="text-white font-bold text-lg">ECD</span>
-                <div className="absolute inset-0 bg-white/10 rounded-full animate-pulse"></div>
+              <div className="relative w-16 h-16 rounded-full overflow-hidden shadow-lg">
+                <Image
+                  src="/images/escuela-exterior.jpg"
+                  alt="Logo Escuela Campos Deportivos"
+                  fill
+                  style={{ objectFit: "cover" }}
+                  className="rounded-full"
+                />
+                <div className="absolute inset-0 bg-[#039b9e]/80 rounded-full flex items-center justify-center">
+                  <span className="text-white font-bold text-lg">ECD</span>
+                </div>
               </div>
               <div>
                 <h3 className="font-bold text-lg">Escuela Municipal</h3>
