@@ -427,16 +427,17 @@ export default function CuerpoDocentePage() {
                             />
                           </div>
 
-                          <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-                            <div className="mb-4 md:mb-0 text-center md:text-left">
-                              <h3 className="text-lg font-bold text-slate-800">{teacher.name}</h3>
-                              <p className="text-[#039b9e] font-medium">{teacher.subject}</p>
+                          <div className="text-center space-y-3">
+                            <div>
+                              <h3 className="text-lg font-bold text-slate-800 leading-tight">{teacher.name}</h3>
+                              <p className="text-[#039b9e] font-medium text-sm mt-2">{teacher.subject}</p>
                             </div>
-                            <div className="flex items-center justify-center md:justify-start space-x-2">
+
+                            <div className="flex items-center justify-center space-x-2 pt-2">
                               <Mail className="h-4 w-4 text-[#039b9e]" />
                               <a
                                 href={`mailto:${teacher.email}`}
-                                className="text-sm text-slate-600 hover:text-[#039b9e] transition-colors"
+                                className="text-xs text-slate-600 hover:text-[#039b9e] transition-colors break-all"
                               >
                                 {teacher.email}
                               </a>
