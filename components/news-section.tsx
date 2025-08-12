@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, Sparkles } from "lucide-react"
+import { ArrowRight, Sparkles, Download } from "lucide-react"
 
 export function NewsSection() {
   const [activeTab, setActiveTab] = useState("estudiantes")
@@ -18,6 +18,22 @@ export function NewsSection() {
 
   const news = {
     estudiantes: [
+      {
+        title: "Estudiantes beneficiarios del transporte escolar año 2023",
+        date: "02 MAR",
+        description:
+          "Estimada comunidad educativa, les compartimos la nómina de estudiantes beneficiarios del transporte escolar año 2023. El proceso de postulación se realizó hasta el 30 de diciembre de 2022.",
+        image: "/images/noticia-transporte.png",
+        content: `Estimada comunidad educativa, junto con saludarles y esperando se encuentren en perfectas condiciones, les compartimos la nómina de estudiantes beneficiarios del transporte escolar año 2023.
+
+Cabe destacar que el proceso de postulación se realizó hasta el día 30 de diciembre de 2022, por tanto el proceso de postulación se encuentra cerrado.
+
+Por otra parte, comentarles que la definición y adjudicación de los cupos, se desarrolló a través de un proceso acucioso de análisis, respecto al puntaje obtenido por cada uno de los estudiantes en su proceso de postulación.
+
+Cualquier duda o consulta respecto del proceso y el comienzo del beneficio, por favor realizarla al correo convivencia@camposdeportivos-temuco.cl.`,
+        hasDownload: true,
+        downloadText: "Resultados Postulación Beneficio de Transporte Escolar 2023",
+      },
       {
         title: "Inicio de año escolar 2025",
         date: "06 MAR",
@@ -91,7 +107,7 @@ export function NewsSection() {
               onClick={() => setActiveTab(tab.id)}
               className={`transition-all duration-300 hover:scale-105 ${
                 activeTab === tab.id
-                  ? "bg-[#039b9e] hover:bg-[#028a8e] shadow-lg animate-pulse-subtle"
+                  ? "bg-[#039b9e] hover:bg-[#028a8e] shadow-lg"
                   : "border-[#039b9e]/30 text-[#039b9e] hover:bg-[#039b9e]/10 hover:border-[#039b9e]"
               }`}
               style={{ animationDelay: `${index * 100}ms` }}
@@ -121,17 +137,33 @@ export function NewsSection() {
                 </div>
               </div>
               <CardContent className="p-6 space-y-4">
-                <h3 className="text-xl font-bold text-slate-800 group-hover:text-[#039b9e] transition-colors duration-300">
+                <h3 className="text-xl font-bold text-slate-800 group-hover:text-[#039b9e] transition-colors duration-300 line-clamp-2">
                   {item.title}
                 </h3>
-                <p className="text-slate-600 leading-relaxed">{item.description}</p>
-                <Button
-                  variant="ghost"
-                  className="text-[#039b9e] hover:text-[#028a8e] p-0 group-hover:translate-x-2 transition-transform duration-300"
-                >
-                  Ver noticia{" "}
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
-                </Button>
+                <p className="text-slate-600 leading-relaxed line-clamp-3">{item.description}</p>
+
+                {item.content && (
+                  <div className="bg-slate-50 rounded-lg p-4 text-sm text-slate-700 leading-relaxed">
+                    <p className="line-clamp-4">{item.content}</p>
+                  </div>
+                )}
+
+                <div className="flex flex-col space-y-2">
+                  <Button
+                    variant="ghost"
+                    className="text-[#039b9e] hover:text-[#028a8e] p-0 group-hover:translate-x-2 transition-transform duration-300 justify-start"
+                  >
+                    Ver noticia completa{" "}
+                    <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
+                  </Button>
+
+                  {item.hasDownload && (
+                    <Button size="sm" className="bg-[#039b9e] hover:bg-[#028a8e] text-xs">
+                      <Download className="mr-2 h-3 w-3" />
+                      Descargar: {item.downloadText}
+                    </Button>
+                  )}
+                </div>
               </CardContent>
             </Card>
           ))}

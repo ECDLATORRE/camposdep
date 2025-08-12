@@ -41,17 +41,14 @@ export function Header() {
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <Link href="/" className="flex items-center space-x-3 hover:scale-105 transition-transform duration-300">
-              <div className="relative w-16 h-16 rounded-full overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <div className="relative w-16 h-16 hover:shadow-xl transition-shadow duration-300">
                 <Image
-                  src="/images/escuela-exterior.jpg"
-                  alt="Logo Escuela Campos Deportivos"
+                  src="/images/logo-oficial.png"
+                  alt="Logo Escuela Municipal Campos Deportivos"
                   fill
-                  style={{ objectFit: "cover" }}
-                  className="rounded-full"
+                  style={{ objectFit: "contain" }}
+                  className="drop-shadow-lg"
                 />
-                <div className="absolute inset-0 bg-[#039b9e]/80 rounded-full flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">ECD</span>
-                </div>
               </div>
               <div>
                 <h1 className="text-xl font-bold text-slate-800 hover:text-[#039b9e] transition-colors duration-300">

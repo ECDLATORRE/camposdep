@@ -10,17 +10,14 @@ export function Footer() {
           {/* School Info */}
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
-              <div className="relative w-16 h-16 rounded-full overflow-hidden shadow-lg">
+              <div className="relative w-16 h-16">
                 <Image
-                  src="/images/escuela-exterior.jpg"
-                  alt="Logo Escuela Campos Deportivos"
+                  src="/images/logo-oficial.png"
+                  alt="Logo Escuela Municipal Campos Deportivos"
                   fill
-                  style={{ objectFit: "cover" }}
-                  className="rounded-full"
+                  style={{ objectFit: "contain" }}
+                  className="drop-shadow-lg"
                 />
-                <div className="absolute inset-0 bg-[#039b9e]/80 rounded-full flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">ECD</span>
-                </div>
               </div>
               <div>
                 <h3 className="font-bold text-lg">Escuela Municipal</h3>
