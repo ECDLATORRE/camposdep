@@ -19,11 +19,11 @@ export default function DirectorPage() {
                   {/* Director Photo */}
                   <div className="text-center">
                     <Image
-                      src="/images/director-escuela.jpg"
-                      width={250}
-                      height={300}
-                      alt="Profesor Layo Gómez Acuña"
-                      className="w-full max-w-xs mx-auto rounded-lg shadow-md mb-4"
+                      src="/images/director-layo-gomez.jpg"
+                      width={400}
+                      height={500}
+                      alt="Profesor Layo Gómez Acuña - Director"
+                      className="w-full max-w-sm mx-auto rounded-lg shadow-md mb-4 hover:shadow-lg transition-shadow duration-300"
                     />
                     <h3 className="text-xl font-bold text-slate-800">Profesor Layo Gómez Acuña</h3>
                     <p className="text-[#039b9e] font-medium">DIRECTOR</p>
@@ -62,8 +62,9 @@ export default function DirectorPage() {
                 </div>
 
                 <div className="mt-8 bg-[#039b9e]/10 rounded-lg p-6">
+                  <h3 className="text-xl font-semibold text-slate-800 mb-3">Visión de Liderazgo</h3>
                   <p className="text-slate-700 leading-relaxed">
-                    Con respecto a los desafíos en la Escuela Campos Deportivos, comentó que "tengo estructurar un
+                    Con respecto a los desafíos en la Escuela Campos Deportivos, comentó que "tengo que estructurar un
                     modelo pedagógico que permita que todos los estudiantes aprendan; que permita solucionar una brecha
                     que se produce en nuestro sistema educativo. La idea es poder acortar esa brecha, para que en la
                     escuela se cumplan los principios de equidad, justicia e igualdad para todos".
