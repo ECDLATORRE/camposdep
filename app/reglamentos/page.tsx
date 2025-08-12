@@ -12,6 +12,7 @@ export default function ReglamentosPage() {
         'El presente Reglamento interno de Evaluación, Calificación y Promoción Escolar, en adelante indistintamente "el Reglamento", es el instrumento mediante el cual, la Escuela Campos Deportivos, declara los procedimientos para la evaluación periódica de los logros y aprendizajes de las y los estudiantes.',
       icon: <FileText className="h-12 w-12 text-[#039b9e]" />,
       downloadText: "REGLAMENTO EVALUACIÓN 2025",
+      downloadLink: "/pdf/reglamento-evaluacion-2025.pdf", // Agregado enlace de descarga
     },
     {
       title: "REGLAMENTO INTERNO Y MANUAL DE CONVIVENCIA ESCOLAR",
@@ -19,6 +20,7 @@ export default function ReglamentosPage() {
         "La convivencia escolar consiste en algo más que en cumplir las normas de los reglamentos de convivencia; es una experiencia que nos abre al aprendizaje sobre los modos de convivir. Desde esta perspectiva, la Política Nacional de Convivencia Escolar orienta al sistema escolar en marco conceptual y pedagógico que orienta, al interior de los establecimientos educacionales.",
       icon: <Users className="h-12 w-12 text-[#039b9e]" />,
       downloadText: "Reglamento Interno 2025",
+      downloadLink: "/pdf/reglamento-interno-2025.pdf", // Agregado enlace de descarga
     },
     {
       title: "PROTOCOLO DE SUSPENSIÓN, CANCELACIÓN DE MATRÍCULA Y EXPULSIÓN",
@@ -26,6 +28,7 @@ export default function ReglamentosPage() {
         "La ley de inclusión N° 20.845 estableció un procedimiento común aplicable tanto a la medida disciplinaria de expulsión como a la cancelación de matrícula, el que debe ser aplicado cuando se trate de una conducta que afecte gravemente la convivencia escolar.",
       icon: <AlertTriangle className="h-12 w-12 text-[#039b9e]" />,
       downloadText: "PROTOCOLO DE SUSPENSIÓN, CANCELACIÓN DE MATRÍCULA Y EXPULSIÓN 2025",
+      downloadLink: "/pdf/protocolo-suspension-cancelacion-expulsion-2025.pdf", // Agregado enlace de descarga
     },
     {
       title: "REGLAMENTO DE ESTUDIANTES EN PRÁCTICA",
@@ -33,6 +36,7 @@ export default function ReglamentosPage() {
         "El presente reglamento establece las normas y directrices que deben cumplir los estudiantes en práctica inicial, intermedia y final de diversas carreras de educación que realizan su práctica en la Escuela Campos Deportivos de la comuna de Temuco.",
       icon: <BookOpen className="h-12 w-12 text-[#039b9e]" />,
       downloadText: "REGLAMENTO ESTUDIANTES EN PRÁCTICA",
+      downloadLink: "/pdf/reglamento-estudiantes-practica.pdf", // Agregado enlace de descarga
     },
   ]
 
@@ -57,7 +61,12 @@ export default function ReglamentosPage() {
                         <div className="flex-1">
                           <h3 className="text-xl font-bold text-slate-800 mb-4">{regulation.title}</h3>
                           <p className="text-slate-700 leading-relaxed mb-6">{regulation.description}</p>
-                          <Button className="bg-[#039b9e] hover:bg-[#028a8e]">
+                          <Button
+                            className="bg-[#039b9e] hover:bg-[#028a8e]"
+                            as="a"
+                            href={regulation.downloadLink}
+                            target="_blank"
+                          >
                             <Download className="mr-2 h-4 w-4" />
                             Descargar: {regulation.downloadText}
                           </Button>
