@@ -39,25 +39,31 @@ export function Header() {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
-            <Link href="/" className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-[#039b9e] rounded-full flex items-center justify-center">
+            <Link href="/" className="flex items-center space-x-3 hover:scale-105 transition-transform duration-300">
+              <div className="relative w-16 h-16 bg-gradient-to-br from-[#039b9e] to-[#028a8e] rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <span className="text-white font-bold text-lg">ECD</span>
+                <div className="absolute inset-0 bg-white/20 rounded-full animate-pulse"></div>
               </div>
               <div>
-                <h1 className="text-xl font-bold text-slate-800">Escuela Municipal</h1>
-                <p className="text-sm text-[#039b9e]">Campos Deportivos</p>
+                <h1 className="text-xl font-bold text-slate-800 hover:text-[#039b9e] transition-colors duration-300">
+                  Escuela Municipal
+                </h1>
+                <p className="text-sm text-[#039b9e] font-medium">Campos Deportivos</p>
               </div>
             </Link>
 
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center space-x-8">
-              <Link href="/" className="text-slate-700 hover:text-[#039b9e] font-medium transition-colors">
+              <Link
+                href="/"
+                className="text-slate-700 hover:text-[#039b9e] font-medium transition-colors duration-300 hover:scale-105"
+              >
                 Inicio
               </Link>
 
               {/* Establecimiento Dropdown */}
               <DropdownMenu>
-                <DropdownMenuTrigger className="flex items-center space-x-1 text-slate-700 hover:text-[#039b9e] font-medium transition-colors">
+                <DropdownMenuTrigger className="flex items-center space-x-1 text-slate-700 hover:text-[#039b9e] font-medium transition-colors duration-300 hover:scale-105">
                   <span>Establecimiento</span>
                   <ChevronDown className="h-4 w-4" />
                 </DropdownMenuTrigger>
@@ -89,25 +95,45 @@ export function Header() {
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              <Link href="/planes" className="text-slate-700 hover:text-[#039b9e] font-medium transition-colors">
+              <Link
+                href="/planes"
+                className="text-slate-700 hover:text-[#039b9e] font-medium transition-colors duration-300 hover:scale-105"
+              >
                 Planes
               </Link>
-              <Link href="/noticias" className="text-slate-700 hover:text-[#039b9e] font-medium transition-colors">
+              <Link
+                href="/noticias"
+                className="text-slate-700 hover:text-[#039b9e] font-medium transition-colors duration-300 hover:scale-105"
+              >
                 Noticias
               </Link>
-              <Link href="/contacto" className="text-slate-700 hover:text-[#039b9e] font-medium transition-colors">
+              <Link
+                href="/contacto"
+                className="text-slate-700 hover:text-[#039b9e] font-medium transition-colors duration-300 hover:scale-105"
+              >
                 Contacto
               </Link>
-              <Link href="/certificados" className="text-slate-700 hover:text-[#039b9e] font-medium transition-colors">
+              <Link
+                href="/certificados"
+                className="text-slate-700 hover:text-[#039b9e] font-medium transition-colors duration-300 hover:scale-105"
+              >
                 Certificados
               </Link>
-              <Link href="/encuesta" className="text-slate-700 hover:text-[#039b9e] font-medium transition-colors">
+              <Link
+                href="/encuesta"
+                className="text-slate-700 hover:text-[#039b9e] font-medium transition-colors duration-300 hover:scale-105"
+              >
                 Encuesta
               </Link>
-              <Link href="/enlaces" className="text-slate-700 hover:text-[#039b9e] font-medium transition-colors">
+              <Link
+                href="/enlaces"
+                className="text-slate-700 hover:text-[#039b9e] font-medium transition-colors duration-300 hover:scale-105"
+              >
                 Enlaces
               </Link>
-              <Button className="bg-[#039b9e] hover:bg-[#028a8e]">Matrícula 2025</Button>
+              <Button className="bg-[#039b9e] hover:bg-[#028a8e] transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
+                Matrícula 2025
+              </Button>
             </nav>
 
             {/* Mobile Menu Button */}

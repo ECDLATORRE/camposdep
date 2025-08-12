@@ -6,14 +6,14 @@ export function Hero() {
   return (
     <section className="relative h-[600px] lg:h-[700px] text-white overflow-hidden">
       <Image
-        src="/images/fondo-escuela.jpg"
-        alt="Campos Deportivos School"
+        src="/images/escuela-exterior.jpg"
+        alt="Escuela Municipal Campos Deportivos - Vista Exterior"
         fill
         style={{ objectFit: "cover", objectPosition: "center" }}
         priority
         className="animate-pulse duration-[3000ms]"
       />
-      <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-black/60"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/50 to-black/70"></div>
 
       {/* Floating elements */}
       <div className="absolute inset-0 overflow-hidden">
@@ -39,7 +39,7 @@ export function Hero() {
               <p className="text-lg text-blue-100 animate-fade-in delay-500">Kinder a Octavo año</p>
             </div>
 
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 space-y-4 animate-slide-in-right delay-700 hover:bg-white/20 transition-all duration-300 hover:scale-105">
+            <div className="bg-white/15 backdrop-blur-sm rounded-lg p-6 space-y-4 animate-slide-in-right delay-700 hover:bg-white/25 transition-all duration-300 hover:scale-105 border border-white/20">
               <h3 className="text-xl font-semibold text-yellow-300">Horarios de atención</h3>
               <div className="space-y-2">
                 <div className="flex items-center space-x-3 hover:translate-x-2 transition-transform duration-200">
@@ -71,7 +71,7 @@ export function Hero() {
           </div>
 
           <div className="relative animate-fade-in-up delay-500">
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 space-y-6 hover:bg-white/20 transition-all duration-500 hover:scale-105 hover:rotate-1">
+            <div className="bg-white/15 backdrop-blur-sm rounded-2xl p-8 space-y-6 hover:bg-white/25 transition-all duration-500 hover:scale-105 hover:rotate-1 border border-white/20">
               <div className="text-center">
                 <div className="w-24 h-24 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full mx-auto mb-4 flex items-center justify-center animate-pulse hover:animate-spin transition-all duration-300 shadow-lg">
                   <div className="text-2xl font-bold text-white">ECD</div>
@@ -81,11 +81,11 @@ export function Hero() {
               </div>
 
               <div className="grid grid-cols-2 gap-4 text-center">
-                <div className="bg-white/10 rounded-lg p-4 hover:bg-white/20 transition-all duration-300 hover:scale-110 cursor-pointer">
+                <div className="bg-white/10 rounded-lg p-4 hover:bg-white/20 transition-all duration-300 hover:scale-110 cursor-pointer border border-white/10">
                   <div className="text-2xl font-bold text-yellow-300 animate-counter">500+</div>
                   <div className="text-sm text-blue-100">Estudiantes</div>
                 </div>
-                <div className="bg-white/10 rounded-lg p-4 hover:bg-white/20 transition-all duration-300 hover:scale-110 cursor-pointer">
+                <div className="bg-white/10 rounded-lg p-4 hover:bg-white/20 transition-all duration-300 hover:scale-110 cursor-pointer border border-white/10">
                   <div className="text-2xl font-bold text-yellow-300 animate-counter">25+</div>
                   <div className="text-sm text-blue-100">Años de experiencia</div>
                 </div>

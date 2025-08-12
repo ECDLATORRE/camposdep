@@ -9,18 +9,19 @@ export function Footer() {
           {/* School Info */}
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-[#039b9e] rounded-full flex items-center justify-center">
+              <div className="relative w-16 h-16 bg-gradient-to-br from-[#039b9e] to-[#028a8e] rounded-full flex items-center justify-center shadow-lg">
                 <span className="text-white font-bold text-lg">ECD</span>
+                <div className="absolute inset-0 bg-white/10 rounded-full animate-pulse"></div>
               </div>
               <div>
-                <h3 className="font-bold">Escuela Municipal</h3>
-                <p className="text-sm text-[#039b9e]">Campos Deportivos</p>
+                <h3 className="font-bold text-lg">Escuela Municipal</h3>
+                <p className="text-sm text-[#039b9e] font-medium">Campos Deportivos</p>
               </div>
             </div>
             <p className="text-slate-300 text-sm">Educación inclusiva, un horizonte de posibilidades</p>
             <div className="flex space-x-3">
-              <Facebook className="h-5 w-5 text-slate-400 hover:text-blue-400 cursor-pointer" />
-              <Youtube className="h-5 w-5 text-slate-400 hover:text-red-400 cursor-pointer" />
+              <Facebook className="h-5 w-5 text-slate-400 hover:text-blue-400 cursor-pointer transition-colors duration-300 hover:scale-110" />
+              <Youtube className="h-5 w-5 text-slate-400 hover:text-red-400 cursor-pointer transition-colors duration-300 hover:scale-110" />
             </div>
           </div>
 
@@ -28,19 +29,34 @@ export function Footer() {
           <div className="space-y-4">
             <h4 className="font-semibold text-lg">Enlaces Rápidos</h4>
             <nav className="flex flex-col space-y-2">
-              <Link href="/quienes-somos" className="text-slate-300 hover:text-white transition-colors">
+              <Link
+                href="/quienes-somos"
+                className="text-slate-300 hover:text-white transition-colors duration-300 hover:translate-x-1"
+              >
                 ¿Quiénes Somos?
               </Link>
-              <Link href="/proyecto-educativo" className="text-slate-300 hover:text-white transition-colors">
+              <Link
+                href="/proyecto-educativo"
+                className="text-slate-300 hover:text-white transition-colors duration-300 hover:translate-x-1"
+              >
                 Proyecto Educativo
               </Link>
-              <Link href="/noticias" className="text-slate-300 hover:text-white transition-colors">
+              <Link
+                href="/noticias"
+                className="text-slate-300 hover:text-white transition-colors duration-300 hover:translate-x-1"
+              >
                 Noticias
               </Link>
-              <Link href="/contacto" className="text-slate-300 hover:text-white transition-colors">
+              <Link
+                href="/contacto"
+                className="text-slate-300 hover:text-white transition-colors duration-300 hover:translate-x-1"
+              >
                 Contacto
               </Link>
-              <Link href="/galeria" className="text-slate-300 hover:text-white transition-colors">
+              <Link
+                href="/galeria"
+                className="text-slate-300 hover:text-white transition-colors duration-300 hover:translate-x-1"
+              >
                 Galería
               </Link>
             </nav>
@@ -50,15 +66,15 @@ export function Footer() {
           <div className="space-y-4">
             <h4 className="font-semibold text-lg">Contacto</h4>
             <div className="space-y-3">
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-3 hover:translate-x-1 transition-transform duration-300">
                 <MapPin className="h-4 w-4 text-[#039b9e]" />
                 <span className="text-slate-300 text-sm">Av. Gabriela Mistral 01055</span>
               </div>
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-3 hover:translate-x-1 transition-transform duration-300">
                 <Phone className="h-4 w-4 text-[#039b9e]" />
                 <span className="text-slate-300 text-sm">+56 45 226 2261</span>
               </div>
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-3 hover:translate-x-1 transition-transform duration-300">
                 <Mail className="h-4 w-4 text-[#039b9e]" />
                 <span className="text-slate-300 text-sm">cdeportivos@temuco.cl</span>
               </div>
@@ -69,15 +85,15 @@ export function Footer() {
           <div className="space-y-4">
             <h4 className="font-semibold text-lg">DAEM Temuco</h4>
             <div className="space-y-3">
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-3 hover:translate-x-1 transition-transform duration-300">
                 <MapPin className="h-4 w-4 text-[#039b9e]" />
                 <span className="text-slate-300 text-sm">Av. Arturo Prat 0130</span>
               </div>
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-3 hover:translate-x-1 transition-transform duration-300">
                 <Phone className="h-4 w-4 text-[#039b9e]" />
                 <span className="text-slate-300 text-sm">+56 45 297 3000</span>
               </div>
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-3 hover:translate-x-1 transition-transform duration-300">
                 <Mail className="h-4 w-4 text-[#039b9e]" />
                 <span className="text-slate-300 text-sm">educacion@temuco.cl</span>
               </div>
