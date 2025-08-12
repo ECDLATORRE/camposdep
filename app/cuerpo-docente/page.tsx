@@ -418,12 +418,21 @@ export default function CuerpoDocentePage() {
                           key={teacherIndex}
                           className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow w-full"
                         >
+                          {/* Placeholder para imagen del profesor */}
+                          <div className="flex justify-center mb-4">
+                            <img
+                              src="/placeholder.svg?height=120&width=100"
+                              alt={teacher.name}
+                              className="w-20 h-24 object-cover rounded-lg shadow-sm"
+                            />
+                          </div>
+
                           <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-                            <div className="mb-4 md:mb-0">
+                            <div className="mb-4 md:mb-0 text-center md:text-left">
                               <h3 className="text-lg font-bold text-slate-800">{teacher.name}</h3>
                               <p className="text-[#039b9e] font-medium">{teacher.subject}</p>
                             </div>
-                            <div className="flex items-center space-x-2">
+                            <div className="flex items-center justify-center md:justify-start space-x-2">
                               <Mail className="h-4 w-4 text-[#039b9e]" />
                               <a
                                 href={`mailto:${teacher.email}`}
