@@ -5,8 +5,9 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Sparkles, Download } from "lucide-react"
 import Link from "next/link"
+import { getNewsByCategory } from "@/lib/auth"
 
-export function NewsSection() {
+export async function NewsSection() {
   const [activeTab, setActiveTab] = useState("estudiantes")
 
   const tabs = [
@@ -17,71 +18,8 @@ export function NewsSection() {
     { id: "deportivos", label: "Deportivos" },
   ]
 
-  const news = {
-    estudiantes: [
-      {
-        title: "Estudiantes beneficiarios del transporte escolar año 2023",
-        date: "02 MAR",
-        description:
-          "Estimada comunidad educativa, les compartimos la nómina de estudiantes beneficiarios del transporte escolar año 2023. El proceso de postulación se realizó hasta el 30 de diciembre de 2022.",
-        image: "/images/noticia-transporte.png",
-        link: "/noticias/transporte-escolar-2023",
-        content: `Estimada comunidad educativa, junto con saludarles y esperando se encuentren en perfectas condiciones, les compartimos la nómina de estudiantes beneficiarios del transporte escolar año 2023.
-
-Cabe destacar que el proceso de postulación se realizó hasta el día 30 de diciembre de 2022, por tanto el proceso de postulación se encuentra cerrado.
-
-Por otra parte, comentarles que la definición y adjudicación de los cupos, se desarrolló a través de un proceso acucioso de análisis, respecto al puntaje obtenido por cada uno de los estudiantes en su proceso de postulación.
-
-Cualquier duda o consulta respecto del proceso y el comienzo del beneficio, por favor realizarla al correo convivencia@camposdeportivos-temuco.cl.`,
-        hasDownload: true,
-        downloadText: "Resultados Postulación Beneficio de Transporte Escolar 2023",
-      },
-      {
-        title: "Inicio de año escolar 2025",
-        date: "06 MAR",
-        description: "Información importante para el inicio del nuevo año académico.",
-        image: "/placeholder.svg?height=200&width=300",
-      },
-      {
-        title: "Período de matrículas abiertas",
-        date: "05 MAR",
-        description: "Proceso de matrícula para nuevos estudiantes.",
-        image: "/placeholder.svg?height=200&width=300",
-      },
-    ],
-    profesores: [
-      {
-        title: "Capacitación docente 2025",
-        date: "15 FEB",
-        description: "Jornada de actualización pedagógica para el cuerpo docente.",
-        image: "/placeholder.svg?height=200&width=300",
-      },
-    ],
-    apoderados: [
-      {
-        title: "Reunión de apoderados",
-        date: "20 MAR",
-        description: "Primera reunión del año con padres y apoderados.",
-        image: "/placeholder.svg?height=200&width=300",
-      },
-    ],
-    comunidad: [
-      {
-        title: "Actividades comunitarias",
-        date: "25 MAR",
-        description: "Programa de actividades para toda la comunidad educativa.",
-        image: "/placeholder.svg?height=200&width=300",
-      },
-    ],
-    deportivos: [
-      {
-        title: "Campeonato interescolar",
-        date: "30 MAR",
-        description: "Participación en competencias deportivas regionales.",
-        image: "/placeholder.svg?height=200&width=300",
-      },
-    ],
-  }
+  // Obtener noticias de la base de datos
+  const newsData = await getNewsByCategory(activeTab)
 
   return (
     <section className="py-20 bg-gradient-to-br from-[#039b9e]/10 via-[#028a8e]/5 to-[#039b9e]/10 relative overflow-hidden">
@@ -121,7 +59,7 @@ Cualquier duda o consulta respecto del proceso y el comienzo del beneficio, por 
 
         {/* News Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {news[activeTab as keyof typeof news]?.map((item, index) => (
+          {newsData?.map((item, index) => (
             <Card
               key={index}
               className="group hover:shadow-2xl transition-all duration-500 border-0 shadow-lg overflow-hidden hover:-translate-y-2 animate-fade-in-up cursor-pointer"
