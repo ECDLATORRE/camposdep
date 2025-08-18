@@ -10,7 +10,7 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "Escuela Campos Deportivos - Temuco, Chile",
   description: "Educación inclusiva, un horizonte de posibilidades",
-    generator: 'v0.dev'
+    generator: 'v0.app'
 }
 
 export default function RootLayout({
