@@ -1,314 +1,134 @@
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 
-export interface User {
-  id: string
-  username: string
-  password: string
-  role: "admin" | "editor"
-  createdAt: string
-}
-
-export interface NewsItem {
-  id: string
-  title: string
-  content: string
-  excerpt: string
-  image: string
-  category: string
-  author: string
-  publishedAt: string
-  updatedAt: string
-  status: "published" | "draft"
-}
-
-export interface GalleryImage {
-  id: string
-  filename: string
-  originalName: string
-  url: string
-  alt: string
-  category: string
-  uploadedAt: string
-  uploadedBy: string
-  size: number
-  mimeType: string
-}
-
-// Usuarios iniciales (en producción esto estaría en una base de datos)
-const initialUsers: User[] = [
+// Simulamos una base de datos simple con archivos JSON
+const users = [
   {
     id: "1",
     username: "AdminNicolas",
-    password: "latorre", // En producción esto estaría hasheado
+    password: "latorre", // En producción, esto debería estar hasheado
     role: "admin",
-    createdAt: new Date().toISOString(),
   },
 ]
 
-// Noticias iniciales
-const initialNews: NewsItem[] = [
+const news = [
   {
     id: "1",
-    title: "Estudiantes beneficiarios del transporte escolar año 2023",
-    content: `Estimada comunidad educativa, junto con saludarles y esperando se encuentren en perfectas condiciones, les compartimos la nómina de estudiantes beneficiarios del transporte escolar año 2023.
-
-Cabe destacar que el proceso de postulación se realizó hasta el día 30 de diciembre de 2022, por tanto el proceso de postulación se encuentra cerrado.
-
-Por otra parte, comentarles que la definición y adjudicación de los cupos, se desarrolló a través de un proceso acucioso de análisis, respecto al puntaje obtenido por cada uno de los estudiantes en su proceso de postulación.
-
-Los días 06 y 07 de marzo, tendrá lugar el reconocimiento de domicilios de la empresa de transporte adjudicada (Surtrans), lo que se realizará por parte de los conductores y asistentes de los furgones de acuerdo al recorrido existente en razón de los estudiantes favorecidos con el servicio.
-
-Cualquier duda o consulta respecto del proceso y el comienzo del beneficio, por favor realizarla al correo: convivencia@camposdeportivos-temuco.cl`,
-    excerpt:
-      "Estimada comunidad educativa, les compartimos la nómina de estudiantes beneficiarios del transporte escolar año 2023.",
-    image: "/images/noticia-transporte.png",
-    category: "estudiantes",
-    author: "AdminNicolas",
-    publishedAt: "2023-03-02T10:00:00Z",
-    updatedAt: "2023-03-02T10:00:00Z",
-    status: "published",
-  },
-  {
-    id: "2",
-    title: "Inicio de año escolar 2025",
+    title: "Transporte Escolar 2023",
     content:
-      "Información importante para el inicio del nuevo año académico. Todos los estudiantes deben presentarse el día 06 de marzo a las 8:30 hrs.",
-    excerpt: "Información importante para el inicio del nuevo año académico.",
-    image: "/placeholder.svg?height=200&width=300",
-    category: "estudiantes",
-    author: "AdminNicolas",
-    publishedAt: "2025-03-06T08:00:00Z",
-    updatedAt: "2025-03-06T08:00:00Z",
-    status: "published",
-  },
-  {
-    id: "3",
-    title: "Período de matrículas abiertas",
-    content:
-      "El proceso de matrícula para nuevos estudiantes estará abierto desde el 05 de marzo hasta el 30 de marzo.",
-    excerpt: "Proceso de matrícula para nuevos estudiantes.",
-    image: "/placeholder.svg?height=200&width=300",
-    category: "apoderados",
-    author: "AdminNicolas",
-    publishedAt: "2025-03-05T09:00:00Z",
-    updatedAt: "2025-03-05T09:00:00Z",
-    status: "published",
+      "Información importante sobre el transporte escolar para el año 2023. Los horarios y rutas han sido actualizados.",
+    imageUrl: "/images/noticia-transporte.png",
+    date: "2023-12-15",
+    slug: "transporte-escolar-2023",
   },
 ]
 
-// Galería inicial
-const initialGallery: GalleryImage[] = [
-  {
-    id: "1",
-    filename: "escuela-exterior.jpg",
-    originalName: "escuela-exterior.jpg",
-    url: "/images/escuela-exterior.jpg",
-    alt: "Vista exterior del edificio escolar",
-    category: "infraestructura",
-    uploadedAt: new Date().toISOString(),
-    uploadedBy: "AdminNicolas",
-    size: 1024000,
-    mimeType: "image/jpeg",
-  },
-  {
-    id: "2",
-    filename: "patio-escuela-estudiantes.jpg",
-    originalName: "patio-escuela-estudiantes.jpg",
-    url: "/images/patio-escuela-estudiantes.jpg",
-    alt: "Estudiantes en el patio de la escuela",
-    category: "vida-escolar",
-    uploadedAt: new Date().toISOString(),
-    uploadedBy: "AdminNicolas",
-    size: 856000,
-    mimeType: "image/jpeg",
-  },
-  {
-    id: "3",
-    filename: "director-layo-gomez.jpg",
-    originalName: "director-layo-gomez.jpg",
-    url: "/images/director-layo-gomez.jpg",
-    alt: "Director Layo Gómez Acuña",
-    category: "equipo",
-    uploadedAt: new Date().toISOString(),
-    uploadedBy: "AdminNicolas",
-    size: 742000,
-    mimeType: "image/jpeg",
-  },
-  {
-    id: "4",
-    filename: "noticia-transporte.png",
-    originalName: "noticia-transporte.png",
-    url: "/images/noticia-transporte.png",
-    alt: "Información sobre transporte escolar",
-    category: "noticias",
-    uploadedAt: new Date().toISOString(),
-    uploadedBy: "AdminNicolas",
-    size: 512000,
-    mimeType: "image/png",
-  },
-]
-
-// Simulamos almacenamiento en memoria (en producción usaríamos una base de datos)
-const users = [...initialUsers]
-const news = [...initialNews]
-const gallery = [...initialGallery]
-
-export async function authenticateUser(username: string, password: string): Promise<User | null> {
+export async function login(username: string, password: string) {
   const user = users.find((u) => u.username === username && u.password === password)
-  return user || null
-}
 
-export async function createSession(user: User) {
-  const cookieStore = cookies()
-  cookieStore.set(
-    "admin-session",
-    JSON.stringify({
-      userId: user.id,
-      username: user.username,
-      role: user.role,
-    }),
-    {
+  if (user) {
+    const cookieStore = cookies()
+    cookieStore.set("session", JSON.stringify({ userId: user.id, username: user.username }), {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      maxAge: 60 * 60 * 24 * 7, // 7 days
-    },
-  )
-}
-
-export async function getSession() {
-  const cookieStore = cookies()
-  const session = cookieStore.get("admin-session")
-
-  if (!session) return null
-
-  try {
-    return JSON.parse(session.value)
-  } catch {
-    return null
+      maxAge: 60 * 60 * 24 * 7, // 7 días
+    })
+    return { success: true, user: { id: user.id, username: user.username } }
   }
-}
 
-export async function requireAuth() {
-  const session = await getSession()
-  if (!session) {
-    redirect("/admin/login")
-  }
-  return session
+  return { success: false, error: "Credenciales inválidas" }
 }
 
 export async function logout() {
   const cookieStore = cookies()
-  cookieStore.delete("admin-session")
+  cookieStore.delete("session")
 }
 
-// Funciones para gestionar usuarios
-export async function getUsers(): Promise<User[]> {
-  return users
-}
+export async function getSession() {
+  const cookieStore = cookies()
+  const session = cookieStore.get("session")
 
-export async function createUser(userData: Omit<User, "id" | "createdAt">): Promise<User> {
-  const newUser: User = {
-    ...userData,
-    id: Date.now().toString(),
-    createdAt: new Date().toISOString(),
+  if (session) {
+    try {
+      return JSON.parse(session.value)
+    } catch {
+      return null
+    }
   }
-  users.push(newUser)
-  return newUser
+
+  return null
 }
 
-export async function deleteUser(userId: string): Promise<boolean> {
-  const index = users.findIndex((u) => u.id === userId)
-  if (index > -1) {
-    users.splice(index, 1)
-    return true
+export async function requireAuth() {
+  const session = await getSession()
+
+  if (!session) {
+    redirect("/admin/login")
   }
-  return false
+
+  return session
 }
 
-// Funciones para gestionar noticias
-export async function getNews(): Promise<NewsItem[]> {
-  return news.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+// Funciones para manejar noticias
+export async function getAllNews() {
+  return news
 }
 
-export async function getNewsById(id: string): Promise<NewsItem | null> {
-  return news.find((n) => n.id === id) || null
+export async function getNewsById(id: string) {
+  return news.find((n) => n.id === id)
 }
 
-export async function createNews(newsData: Omit<NewsItem, "id" | "createdAt" | "updatedAt">): Promise<NewsItem> {
-  const newNews: NewsItem = {
-    ...newsData,
+export async function createNews(data: any) {
+  const newNews = {
     id: Date.now().toString(),
-    updatedAt: new Date().toISOString(),
+    ...data,
+    slug: data.title
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^\w-]/g, ""),
   }
   news.push(newNews)
   return newNews
 }
 
-export async function updateNews(id: string, newsData: Partial<NewsItem>): Promise<NewsItem | null> {
+export async function updateNews(id: string, data: any) {
   const index = news.findIndex((n) => n.id === id)
-  if (index > -1) {
-    news[index] = {
-      ...news[index],
-      ...newsData,
-      updatedAt: new Date().toISOString(),
-    }
+  if (index !== -1) {
+    news[index] = { ...news[index], ...data }
     return news[index]
   }
   return null
 }
 
-export async function deleteNews(id: string): Promise<boolean> {
+export async function deleteNews(id: string) {
   const index = news.findIndex((n) => n.id === id)
-  if (index > -1) {
+  if (index !== -1) {
     news.splice(index, 1)
     return true
   }
   return false
 }
 
-export async function getNewsByCategory(category: string): Promise<NewsItem[]> {
-  return news
-    .filter((n) => n.category === category && n.status === "published")
-    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+// Funciones para manejar usuarios
+export async function getAllUsers() {
+  return users.map((u) => ({ id: u.id, username: u.username, role: u.role }))
 }
 
-// Funciones para gestionar galería
-export async function getGalleryImages(): Promise<GalleryImage[]> {
-  return gallery.sort((a, b) => new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime())
-}
-
-export async function getGalleryImagesByCategory(category: string): Promise<GalleryImage[]> {
-  return gallery
-    .filter((img) => img.category === category)
-    .sort((a, b) => new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime())
-}
-
-export async function addGalleryImage(imageData: Omit<GalleryImage, "id" | "uploadedAt">): Promise<GalleryImage> {
-  const newImage: GalleryImage = {
-    ...imageData,
+export async function createUser(data: any) {
+  const newUser = {
     id: Date.now().toString(),
-    uploadedAt: new Date().toISOString(),
+    ...data,
   }
-  gallery.push(newImage)
-  return newImage
+  users.push(newUser)
+  return { id: newUser.id, username: newUser.username, role: newUser.role }
 }
 
-export async function deleteGalleryImage(id: string): Promise<boolean> {
-  const index = gallery.findIndex((img) => img.id === id)
-  if (index > -1) {
-    gallery.splice(index, 1)
+export async function deleteUser(id: string) {
+  const index = users.findIndex((u) => u.id === id)
+  if (index !== -1 && users[index].username !== "AdminNicolas") {
+    users.splice(index, 1)
     return true
   }
   return false
-}
-
-export async function updateGalleryImage(id: string, updates: Partial<GalleryImage>): Promise<GalleryImage | null> {
-  const index = gallery.findIndex((img) => img.id === id)
-  if (index > -1) {
-    gallery[index] = { ...gallery[index], ...updates }
-    return gallery[index]
-  }
-  return null
 }
