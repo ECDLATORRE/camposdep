@@ -81,9 +81,8 @@ export default function LoginPage() {
             </Button>
           </form>
 
-          <div className="text-center text-sm text-slate-500">
-            <p>Usuario inicial: AdminNicolas</p>
-            <p>Contraseña: latorre</p>
+          <div className="text-center text-xs text-slate-400">
+            <p>Acceso restringido solo para personal autorizado</p>
           </div>
         </CardContent>
       </Card>

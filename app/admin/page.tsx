@@ -1,7 +1,7 @@
 import { requireAuth } from "@/lib/auth"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Newspaper, Users, BarChart3, Settings } from "lucide-react"
+import { Newspaper, Users, BarChart3, Settings, Images } from "lucide-react"
 import Link from "next/link"
 
 export default async function AdminDashboard() {
@@ -35,6 +35,18 @@ export default async function AdminDashboard() {
               </CardHeader>
               <CardContent>
                 <p className="text-slate-600">Crear, editar y eliminar noticias del sitio web</p>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link href="/admin/galeria">
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+              <CardHeader className="flex flex-row items-center space-y-0 pb-2">
+                <CardTitle className="text-lg font-medium">Gestionar Galería</CardTitle>
+                <Images className="h-6 w-6 text-[#039b9e] ml-auto" />
+              </CardHeader>
+              <CardContent>
+                <p className="text-slate-600">Subir y administrar imágenes de la galería</p>
               </CardContent>
             </Card>
           </Link>
