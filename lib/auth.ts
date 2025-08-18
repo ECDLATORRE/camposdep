@@ -1,12 +1,22 @@
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 
-// Simulamos una base de datos simple con archivos JSON
+// Simple authentication utilities
+export function hashPassword(password: string): string {
+  // In a real app, use bcrypt or similar
+  return Buffer.from(password).toString("base64")
+}
+
+export function verifyPassword(password: string, hash: string): boolean {
+  return hashPassword(password) === hash
+}
+
+// Mock user database
 const users = [
   {
     id: "1",
     username: "AdminNicolas",
-    password: "latorre", // En producción, esto debería estar hasheado
+    password: hashPassword("latorre"), // latorre
     role: "admin",
   },
 ]
@@ -24,7 +34,7 @@ const news = [
 ]
 
 export async function login(username: string, password: string) {
-  const user = users.find((u) => u.username === username && u.password === password)
+  const user = users.find((u) => u.username === username && verifyPassword(password, u.password))
 
   if (user) {
     const cookieStore = cookies()
@@ -131,4 +141,8 @@ export async function deleteUser(id: string) {
     return true
   }
   return false
+}
+
+export function findUser(username: string) {
+  return users.find((user) => user.username === username)
 }

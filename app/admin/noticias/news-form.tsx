@@ -3,12 +3,12 @@
 import type React from "react"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Alert, AlertDescription } from "@/components/ui/alert"
 
 interface NewsFormProps {
   initialData?: {
@@ -18,100 +18,113 @@ interface NewsFormProps {
     imageUrl: string
     date: string
   }
-  onSubmit: (data: any) => Promise<void>
-  submitLabel: string
+  isEditing?: boolean
 }
 
-export function NewsForm({ initialData, onSubmit, submitLabel }: NewsFormProps) {
+export function NewsForm({ initialData, isEditing = false }: NewsFormProps) {
+  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState({
     title: initialData?.title || "",
     content: initialData?.content || "",
     imageUrl: initialData?.imageUrl || "",
     date: initialData?.date || new Date().toISOString().split("T")[0],
   })
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
 
-  async function handleSubmit(e: React.FormEvent) {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setLoading(true)
-    setError("")
+    setIsLoading(true)
 
     try {
-      await onSubmit(formData)
-    } catch (err) {
-      setError("Error al procesar la solicitud")
+      const url = isEditing ? `/api/admin/news/${initialData?.id}` : "/api/admin/news"
+
+      const method = isEditing ? "PUT" : "POST"
+
+      const response = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      })
+
+      if (response.ok) {
+        router.push("/admin/noticias")
+        router.refresh()
+      } else {
+        alert("Error al guardar la noticia")
+      }
+    } catch (error) {
+      console.error("Error:", error)
+      alert("Error al guardar la noticia")
     } finally {
-      setLoading(false)
+      setIsLoading(false)
     }
   }
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }))
+  }
+
   return (
-    <Card className="max-w-2xl mx-auto">
-      <CardHeader>
-        <CardTitle>{submitLabel}</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {error && (
-            <Alert variant="destructive">
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
+    <div className="min-h-screen bg-gray-50 p-8">
+      <div className="max-w-2xl mx-auto">
+        <Card>
+          <CardHeader>
+            <CardTitle>{isEditing ? "Editar Noticia" : "Nueva Noticia"}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
+                <Label htmlFor="title">Título</Label>
+                <Input id="title" name="title" value={formData.title} onChange={handleChange} required />
+              </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="title">Título *</Label>
-            <Input
-              id="title"
-              value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              required
-            />
-          </div>
+              <div>
+                <Label htmlFor="content">Contenido</Label>
+                <Textarea
+                  id="content"
+                  name="content"
+                  value={formData.content}
+                  onChange={handleChange}
+                  rows={6}
+                  required
+                />
+              </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="content">Contenido *</Label>
-            <Textarea
-              id="content"
-              value={formData.content}
-              onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-              rows={6}
-              required
-            />
-          </div>
+              <div>
+                <Label htmlFor="imageUrl">URL de la Imagen</Label>
+                <Input
+                  id="imageUrl"
+                  name="imageUrl"
+                  type="url"
+                  value={formData.imageUrl}
+                  onChange={handleChange}
+                  placeholder="https://ejemplo.com/imagen.jpg"
+                />
+              </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="imageUrl">URL de la imagen</Label>
-            <Input
-              id="imageUrl"
-              type="url"
-              value={formData.imageUrl}
-              onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-              placeholder="https://ejemplo.com/imagen.jpg"
-            />
-          </div>
+              <div>
+                <Label htmlFor="date">Fecha</Label>
+                <Input id="date" name="date" type="date" value={formData.date} onChange={handleChange} required />
+              </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="date">Fecha *</Label>
-            <Input
-              id="date"
-              type="date"
-              value={formData.date}
-              onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-              required
-            />
-          </div>
-
-          <div className="flex justify-end space-x-2 pt-4">
-            <Button type="button" variant="outline" onClick={() => window.history.back()}>
-              Cancelar
-            </Button>
-            <Button type="submit" className="bg-[#039b9e] hover:bg-[#028a8e]" disabled={loading}>
-              {loading ? "Procesando..." : submitLabel}
-            </Button>
-          </div>
-        </form>
-      </CardContent>
-    </Card>
+              <div className="flex gap-4">
+                <Button type="submit" disabled={isLoading}>
+                  {isLoading ? "Guardando..." : isEditing ? "Actualizar" : "Crear"}
+                </Button>
+                <Button type="button" variant="outline" onClick={() => router.push("/admin/noticias")}>
+                  Cancelar
+                </Button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
   )
 }

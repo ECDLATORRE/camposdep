@@ -39,24 +39,45 @@ export function Header() {
       <header className="bg-white shadow-lg sticky top-0 z-50">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-20">
-            {/* Logo */}
-            <Link href="/" className="flex items-center space-x-3 hover:scale-105 transition-transform duration-300">
-              <div className="relative w-16 h-16 hover:shadow-xl transition-shadow duration-300">
-                <Image
-                  src="/images/logo-oficial.png"
-                  alt="Logo Escuela Municipal Campos Deportivos"
-                  fill
-                  style={{ objectFit: "contain" }}
-                  className="drop-shadow-lg"
-                />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-slate-800 hover:text-[#039b9e] transition-colors duration-300">
-                  Escuela Municipal
-                </h1>
-                <p className="text-sm text-[#039b9e] font-medium">Campos Deportivos</p>
-              </div>
-            </Link>
+            {/* Logo Section */}
+            <div className="flex items-center space-x-6">
+              {/* School Logo */}
+              <Link href="/" className="flex items-center space-x-3 hover:scale-105 transition-transform duration-300">
+                <div className="relative w-16 h-16 hover:shadow-xl transition-shadow duration-300">
+                  <Image
+                    src="/images/logo-oficial.png"
+                    alt="Logo Escuela Municipal Campos Deportivos"
+                    fill
+                    style={{ objectFit: "contain" }}
+                    className="drop-shadow-lg"
+                  />
+                </div>
+                <div>
+                  <h1 className="text-xl font-bold text-slate-800 hover:text-[#039b9e] transition-colors duration-300">
+                    Escuela Municipal
+                  </h1>
+                  <p className="text-sm text-[#039b9e] font-medium">Campos Deportivos</p>
+                </div>
+              </Link>
+
+              {/* Lirmi Logo */}
+              <a
+                href="https://lms.lirmi.com/login"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:scale-110 transition-transform duration-300"
+              >
+                <div className="relative w-12 h-12 hover:shadow-lg transition-shadow duration-300">
+                  <Image
+                    src="/images/lirmi-logo.png"
+                    alt="Lirmi - Plataforma Educativa"
+                    fill
+                    style={{ objectFit: "contain" }}
+                    className="drop-shadow-md"
+                  />
+                </div>
+              </a>
+            </div>
 
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center space-x-8">

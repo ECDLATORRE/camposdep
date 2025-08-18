@@ -7,16 +7,19 @@ export function InterestSites() {
       name: "Postulación Online Aquí",
       color: "bg-[#039b9e]",
       textColor: "text-white",
+      url: "#",
     },
     {
       name: "ESTUDIO",
       color: "bg-yellow-400",
       textColor: "text-black",
+      url: "#",
     },
     {
-      name: "HySciex",
-      color: "bg-blue-600",
+      name: "Lirmi",
+      color: "bg-gradient-to-r from-yellow-400 via-purple-500 to-cyan-400",
       textColor: "text-white",
+      url: "https://lms.lirmi.com/login",
     },
   ]
 
@@ -27,13 +30,16 @@ export function InterestSites() {
       </CardHeader>
       <CardContent className="space-y-3">
         {sites.map((site, index) => (
-          <div
+          <a
             key={index}
-            className={`${site.color} ${site.textColor} rounded-lg p-4 cursor-pointer hover:opacity-90 transition-opacity flex items-center justify-between`}
+            href={site.url}
+            target={site.url.startsWith("http") ? "_blank" : "_self"}
+            rel={site.url.startsWith("http") ? "noopener noreferrer" : undefined}
+            className={`${site.color} ${site.textColor} rounded-lg p-4 cursor-pointer hover:opacity-90 transition-all duration-300 hover:scale-105 flex items-center justify-between block`}
           >
             <span className="font-medium">{site.name}</span>
             <ExternalLink className="h-4 w-4" />
-          </div>
+          </a>
         ))}
       </CardContent>
     </Card>
