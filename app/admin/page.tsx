@@ -1,7 +1,7 @@
 import { requireAuth } from "@/lib/auth"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Newspaper, Users, BarChart3, Settings, Images } from "lucide-react"
+import { Users, FileText, ImageIcon, LogOut } from "lucide-react"
 import Link from "next/link"
 
 export default async function AdminDashboard() {
@@ -16,8 +16,9 @@ export default async function AdminDashboard() {
               <h1 className="text-2xl font-bold text-slate-800">Panel de Administración</h1>
               <p className="text-slate-600">Bienvenido, {session.username}</p>
             </div>
-            <form action="/admin/logout" method="post">
-              <Button variant="outline" type="submit">
+            <form action="/admin/logout" method="POST">
+              <Button type="submit" variant="outline" className="text-red-600 hover:text-red-700 bg-transparent">
+                <LogOut className="h-4 w-4 mr-2" />
                 Cerrar Sesión
               </Button>
             </form>
@@ -27,61 +28,74 @@ export default async function AdminDashboard() {
 
       <div className="container mx-auto px-4 py-8">
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <Link href="/admin/noticias">
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-              <CardHeader className="flex flex-row items-center space-y-0 pb-2">
-                <CardTitle className="text-lg font-medium">Gestionar Noticias</CardTitle>
-                <Newspaper className="h-6 w-6 text-[#039b9e] ml-auto" />
-              </CardHeader>
-              <CardContent>
-                <p className="text-slate-600">Crear, editar y eliminar noticias del sitio web</p>
-              </CardContent>
-            </Card>
-          </Link>
-
-          <Link href="/admin/galeria">
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-              <CardHeader className="flex flex-row items-center space-y-0 pb-2">
-                <CardTitle className="text-lg font-medium">Gestionar Galería</CardTitle>
-                <Images className="h-6 w-6 text-[#039b9e] ml-auto" />
-              </CardHeader>
-              <CardContent>
-                <p className="text-slate-600">Subir y administrar imágenes de la galería</p>
-              </CardContent>
-            </Card>
-          </Link>
-
-          {session.role === "admin" && (
-            <Link href="/admin/usuarios">
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-                <CardHeader className="flex flex-row items-center space-y-0 pb-2">
-                  <CardTitle className="text-lg font-medium">Gestionar Usuarios</CardTitle>
-                  <Users className="h-6 w-6 text-[#039b9e] ml-auto" />
-                </CardHeader>
-                <CardContent>
-                  <p className="text-slate-600">Crear y administrar usuarios del sistema</p>
-                </CardContent>
-              </Card>
-            </Link>
-          )}
-
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer opacity-50">
-            <CardHeader className="flex flex-row items-center space-y-0 pb-2">
-              <CardTitle className="text-lg font-medium">Estadísticas</CardTitle>
-              <BarChart3 className="h-6 w-6 text-[#039b9e] ml-auto" />
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardHeader>
+              <CardTitle className="flex items-center text-[#039b9e]">
+                <FileText className="h-5 w-5 mr-2" />
+                Gestión de Noticias
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-slate-600">Ver estadísticas del sitio web (Próximamente)</p>
+              <p className="text-slate-600 mb-4">Crear, editar y eliminar noticias del sitio web.</p>
+              <Link href="/admin/noticias">
+                <Button className="w-full bg-[#039b9e] hover:bg-[#028a8e]">Administrar Noticias</Button>
+              </Link>
             </CardContent>
           </Card>
 
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer opacity-50">
-            <CardHeader className="flex flex-row items-center space-y-0 pb-2">
-              <CardTitle className="text-lg font-medium">Configuración</CardTitle>
-              <Settings className="h-6 w-6 text-[#039b9e] ml-auto" />
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardHeader>
+              <CardTitle className="flex items-center text-[#039b9e]">
+                <ImageIcon className="h-5 w-5 mr-2" />
+                Gestión de Galería
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-slate-600">Configuración general del sistema (Próximamente)</p>
+              <p className="text-slate-600 mb-4">Administrar archivos e imágenes del sitio web.</p>
+              <Link href="/admin/galeria">
+                <Button className="w-full bg-[#039b9e] hover:bg-[#028a8e]">Administrar Galería</Button>
+              </Link>
+            </CardContent>
+          </Card>
+
+          {session.role === "admin" && (
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="flex items-center text-[#039b9e]">
+                  <Users className="h-5 w-5 mr-2" />
+                  Gestión de Usuarios
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-slate-600 mb-4">Crear y administrar usuarios del sistema.</p>
+                <Link href="/admin/usuarios">
+                  <Button className="w-full bg-[#039b9e] hover:bg-[#028a8e]">Administrar Usuarios</Button>
+                </Link>
+              </CardContent>
+            </Card>
+          )}
+        </div>
+
+        <div className="mt-8">
+          <Card>
+            <CardHeader>
+              <CardTitle>Estadísticas Rápidas</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-3 gap-4">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-[#039b9e]">12</div>
+                  <div className="text-slate-600">Noticias Publicadas</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-[#039b9e]">45</div>
+                  <div className="text-slate-600">Archivos en Galería</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-[#039b9e]">3</div>
+                  <div className="text-slate-600">Usuarios Activos</div>
+                </div>
+              </div>
             </CardContent>
           </Card>
         </div>

@@ -1,12 +1,18 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { requireAuth, getGalleryImages, addGalleryImage } from "@/lib/auth"
+import { requireAuth } from "@/lib/auth"
+import { getDirectoryContents, saveUploadedFile, createDirectory } from "@/lib/file-manager"
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     await requireAuth()
-    const images = await getGalleryImages()
-    return NextResponse.json({ images })
+
+    const { searchParams } = new URL(request.url)
+    const path = searchParams.get("path") || ""
+
+    const files = await getDirectoryContents(path)
+    return NextResponse.json({ files })
   } catch (error) {
+    console.error("Error fetching files:", error)
     return NextResponse.json({ error: "Error interno del servidor" }, { status: 500 })
   }
 }
@@ -16,32 +22,51 @@ export async function POST(request: NextRequest) {
     const session = await requireAuth()
     const formData = await request.formData()
 
-    const file = formData.get("file") as File
-    const alt = formData.get("alt") as string
-    const category = formData.get("category") as string
+    const action = formData.get("action") as string
+    const path = (formData.get("path") as string) || ""
 
-    if (!file || !alt || !category) {
-      return NextResponse.json({ error: "Todos los campos son requeridos" }, { status: 400 })
+    if (action === "upload") {
+      const file = formData.get("file") as File
+
+      if (!file) {
+        return NextResponse.json({ error: "No se proporcionó archivo" }, { status: 400 })
+      }
+
+      const savedPath = await saveUploadedFile(file, path)
+
+      if (!savedPath) {
+        return NextResponse.json({ error: "Error al guardar el archivo" }, { status: 500 })
+      }
+
+      return NextResponse.json({
+        success: true,
+        message: "Archivo subido correctamente",
+        path: savedPath,
+      })
     }
 
-    // En un entorno real, aquí subirías el archivo a un servicio de almacenamiento
-    // Por ahora, simulamos la subida
-    const filename = `${Date.now()}-${file.name}`
-    const url = `/uploads/${filename}`
+    if (action === "create-folder") {
+      const name = formData.get("name") as string
 
-    const image = await addGalleryImage({
-      filename,
-      originalName: file.name,
-      url,
-      alt,
-      category,
-      uploadedBy: session.username,
-      size: file.size,
-      mimeType: file.type,
-    })
+      if (!name) {
+        return NextResponse.json({ error: "Nombre de carpeta requerido" }, { status: 400 })
+      }
 
-    return NextResponse.json({ success: true, image })
+      const success = await createDirectory(path, name)
+
+      if (!success) {
+        return NextResponse.json({ error: "Error al crear la carpeta" }, { status: 500 })
+      }
+
+      return NextResponse.json({
+        success: true,
+        message: "Carpeta creada correctamente",
+      })
+    }
+
+    return NextResponse.json({ error: "Acción no válida" }, { status: 400 })
   } catch (error) {
+    console.error("Error in POST:", error)
     return NextResponse.json({ error: "Error interno del servidor" }, { status: 500 })
   }
 }
