@@ -1,5 +1,7 @@
 "use client"
 
+import type React from "react"
+
 import { useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -10,8 +12,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { ArrowLeft, Save } from "lucide-react"
 import Link from "next/link"
-import { createNewsAction, updateNewsAction } from "../actions"
 import type { NewsItem } from "@/lib/auth"
+import { useRouter } from "next/navigation"
 
 interface NewsFormProps {
   news?: NewsItem
@@ -22,31 +24,37 @@ export function NewsForm({ news }: NewsFormProps) {
   const [loading, setLoading] = useState(false)
   const [category, setCategory] = useState(news?.category || "")
   const [status, setStatus] = useState(news?.status || "draft")
+  const router = useRouter()
 
-  async function handleSubmit(formData: FormData) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
     setLoading(true)
     setError("")
 
+    const formData = new FormData(e.currentTarget)
     formData.set("category", category)
     formData.set("status", status)
 
     try {
-      if (news) {
-        const result = await updateNewsAction(news.id, formData)
-        if (result?.error) {
-          setError(result.error)
-        }
-      } else {
-        const result = await createNewsAction(formData)
-        if (result?.error) {
-          setError(result.error)
-        }
+      const response = await fetch(news ? `/api/admin/news/${news.id}` : "/api/admin/news", {
+        method: news ? "PUT" : "POST",
+        body: formData,
+      })
+
+      const result = await response.json()
+
+      if (!response.ok) {
+        setError(result.error || "Error al guardar la noticia")
+        return
       }
+
+      router.push("/admin/noticias")
+      router.refresh()
     } catch (err) {
       setError("Error al guardar la noticia")
+    } finally {
+      setLoading(false)
     }
-
-    setLoading(false)
   }
 
   return (
@@ -67,7 +75,7 @@ export function NewsForm({ news }: NewsFormProps) {
           </Alert>
         )}
 
-        <form action={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label htmlFor="title">Título *</Label>

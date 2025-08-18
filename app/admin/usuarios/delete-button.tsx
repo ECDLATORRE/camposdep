@@ -2,8 +2,8 @@
 
 import { Button } from "@/components/ui/button"
 import { Trash2 } from "lucide-react"
-import { deleteUserAction } from "./actions"
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 
 interface DeleteUserButtonProps {
   userId: string
@@ -11,6 +11,7 @@ interface DeleteUserButtonProps {
 
 export function DeleteUserButton({ userId }: DeleteUserButtonProps) {
   const [loading, setLoading] = useState(false)
+  const router = useRouter()
 
   async function handleDelete() {
     if (!confirm("¿Estás seguro de que quieres eliminar este usuario?")) {
@@ -18,8 +19,22 @@ export function DeleteUserButton({ userId }: DeleteUserButtonProps) {
     }
 
     setLoading(true)
-    await deleteUserAction(userId)
-    setLoading(false)
+
+    try {
+      const response = await fetch(`/api/admin/users/${userId}`, {
+        method: "DELETE",
+      })
+
+      if (response.ok) {
+        router.refresh()
+      } else {
+        alert("Error al eliminar el usuario")
+      }
+    } catch (error) {
+      alert("Error al eliminar el usuario")
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (

@@ -2,8 +2,8 @@
 
 import { Button } from "@/components/ui/button"
 import { Trash2 } from "lucide-react"
-import { deleteNewsAction } from "./actions"
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 
 interface DeleteNewsButtonProps {
   newsId: string
@@ -11,6 +11,7 @@ interface DeleteNewsButtonProps {
 
 export function DeleteNewsButton({ newsId }: DeleteNewsButtonProps) {
   const [loading, setLoading] = useState(false)
+  const router = useRouter()
 
   async function handleDelete() {
     if (!confirm("¿Estás seguro de que quieres eliminar esta noticia?")) {
@@ -18,8 +19,22 @@ export function DeleteNewsButton({ newsId }: DeleteNewsButtonProps) {
     }
 
     setLoading(true)
-    await deleteNewsAction(newsId)
-    setLoading(false)
+
+    try {
+      const response = await fetch(`/api/admin/news/${newsId}`, {
+        method: "DELETE",
+      })
+
+      if (response.ok) {
+        router.refresh()
+      } else {
+        alert("Error al eliminar la noticia")
+      }
+    } catch (error) {
+      alert("Error al eliminar la noticia")
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (

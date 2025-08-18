@@ -1,14 +1,14 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, Sparkles, Download } from "lucide-react"
+import { ArrowRight, Sparkles } from "lucide-react"
 import Link from "next/link"
-import { getNewsByCategory } from "@/lib/auth"
 
-export async function NewsSection() {
+export function NewsSection() {
   const [activeTab, setActiveTab] = useState("estudiantes")
+  const [newsData, setNewsData] = useState<any[]>([])
 
   const tabs = [
     { id: "estudiantes", label: "Estudiantes" },
@@ -18,8 +18,82 @@ export async function NewsSection() {
     { id: "deportivos", label: "Deportivos" },
   ]
 
-  // Obtener noticias de la base de datos
-  const newsData = await getNewsByCategory(activeTab)
+  // Datos de ejemplo para mostrar mientras no hay noticias en la base de datos
+  const sampleNews = {
+    estudiantes: [
+      {
+        id: "1",
+        title: "Estudiantes beneficiarios del transporte escolar año 2023",
+        excerpt:
+          "Estimada comunidad educativa, les compartimos la nómina de estudiantes beneficiarios del transporte escolar año 2023.",
+        image: "/images/noticia-transporte.png",
+        date: "02 MAR",
+        author: "AdminNicolas",
+      },
+      {
+        id: "2",
+        title: "Inicio de año escolar 2025",
+        excerpt: "Información importante para el inicio del nuevo año académico.",
+        image: "/placeholder.svg?height=200&width=300",
+        date: "06 MAR",
+        author: "AdminNicolas",
+      },
+      {
+        id: "3",
+        title: "Período de matrículas abiertas",
+        excerpt: "Proceso de matrícula para nuevos estudiantes.",
+        image: "/placeholder.svg?height=200&width=300",
+        date: "05 MAR",
+        author: "AdminNicolas",
+      },
+    ],
+    profesores: [
+      {
+        id: "4",
+        title: "Capacitación docente 2025",
+        excerpt: "Jornada de actualización pedagógica para el cuerpo docente.",
+        image: "/placeholder.svg?height=200&width=300",
+        date: "15 FEB",
+        author: "AdminNicolas",
+      },
+    ],
+    apoderados: [
+      {
+        id: "5",
+        title: "Reunión de apoderados",
+        excerpt: "Primera reunión del año con padres y apoderados.",
+        image: "/placeholder.svg?height=200&width=300",
+        date: "20 MAR",
+        author: "AdminNicolas",
+      },
+    ],
+    comunidad: [
+      {
+        id: "6",
+        title: "Actividades comunitarias",
+        excerpt: "Programa de actividades para toda la comunidad educativa.",
+        image: "/placeholder.svg?height=200&width=300",
+        date: "25 MAR",
+        author: "AdminNicolas",
+      },
+    ],
+    deportivos: [
+      {
+        id: "7",
+        title: "Campeonato interescolar",
+        excerpt: "Participación en competencias deportivas regionales.",
+        image: "/placeholder.svg?height=200&width=300",
+        date: "30 MAR",
+        author: "AdminNicolas",
+      },
+    ],
+  }
+
+  useEffect(() => {
+    // Aquí podrías hacer una llamada a la API para obtener las noticias reales
+    // Por ahora usamos los datos de ejemplo
+    setNewsData(sampleNews[activeTab as keyof typeof sampleNews] || [])
+  }, [activeTab])
 
   return (
     <section className="py-20 bg-gradient-to-br from-[#039b9e]/10 via-[#028a8e]/5 to-[#039b9e]/10 relative overflow-hidden">
@@ -59,9 +133,9 @@ export async function NewsSection() {
 
         {/* News Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {newsData?.map((item, index) => (
+          {newsData.map((item, index) => (
             <Card
-              key={index}
+              key={item.id}
               className="group hover:shadow-2xl transition-all duration-500 border-0 shadow-lg overflow-hidden hover:-translate-y-2 animate-fade-in-up cursor-pointer"
               style={{ animationDelay: `${index * 150}ms` }}
             >
@@ -80,26 +154,10 @@ export async function NewsSection() {
                 <h3 className="text-xl font-bold text-slate-800 group-hover:text-[#039b9e] transition-colors duration-300 line-clamp-2">
                   {item.title}
                 </h3>
-                <p className="text-slate-600 leading-relaxed line-clamp-3">{item.description}</p>
-
-                {item.content && (
-                  <div className="bg-slate-50 rounded-lg p-4 text-sm text-slate-700 leading-relaxed">
-                    <p className="line-clamp-4">{item.content}</p>
-                  </div>
-                )}
+                <p className="text-slate-600 leading-relaxed line-clamp-3">{item.excerpt}</p>
 
                 <div className="flex flex-col space-y-2">
-                  {item.link ? (
-                    <Link href={item.link}>
-                      <Button
-                        variant="ghost"
-                        className="text-[#039b9e] hover:text-[#028a8e] p-0 group-hover:translate-x-2 transition-transform duration-300 justify-start"
-                      >
-                        Ver noticia completa{" "}
-                        <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
-                      </Button>
-                    </Link>
-                  ) : (
+                  <Link href={`/noticias/${item.id}`}>
                     <Button
                       variant="ghost"
                       className="text-[#039b9e] hover:text-[#028a8e] p-0 group-hover:translate-x-2 transition-transform duration-300 justify-start"
@@ -107,14 +165,7 @@ export async function NewsSection() {
                       Ver noticia completa{" "}
                       <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
                     </Button>
-                  )}
-
-                  {item.hasDownload && (
-                    <Button size="sm" className="bg-[#039b9e] hover:bg-[#028a8e] text-xs">
-                      <Download className="mr-2 h-3 w-3" />
-                      Descargar: {item.downloadText}
-                    </Button>
-                  )}
+                  </Link>
                 </div>
               </CardContent>
             </Card>

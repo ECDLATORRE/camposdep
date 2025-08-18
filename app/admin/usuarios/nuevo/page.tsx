@@ -1,5 +1,7 @@
 "use client"
 
+import type React from "react"
+
 import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -9,26 +11,42 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { ArrowLeft, UserPlus } from "lucide-react"
 import Link from "next/link"
-import { createUserAction } from "../actions"
+import { useRouter } from "next/navigation"
 
 export default function NewUserPage() {
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
   const [role, setRole] = useState("")
+  const router = useRouter()
 
-  async function handleSubmit(formData: FormData) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
     setLoading(true)
     setError("")
 
+    const formData = new FormData(e.currentTarget)
     formData.set("role", role)
 
-    const result = await createUserAction(formData)
+    try {
+      const response = await fetch("/api/admin/users", {
+        method: "POST",
+        body: formData,
+      })
 
-    if (result?.error) {
-      setError(result.error)
+      const result = await response.json()
+
+      if (!response.ok) {
+        setError(result.error || "Error al crear el usuario")
+        return
+      }
+
+      router.push("/admin/usuarios")
+      router.refresh()
+    } catch (err) {
+      setError("Error al crear el usuario")
+    } finally {
+      setLoading(false)
     }
-
-    setLoading(false)
   }
 
   return (
@@ -61,7 +79,7 @@ export default function NewUserPage() {
               </Alert>
             )}
 
-            <form action={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="username">Nombre de Usuario *</Label>
                 <Input id="username" name="username" placeholder="Ingresa el nombre de usuario" required />
