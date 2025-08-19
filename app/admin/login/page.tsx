@@ -1,32 +1,49 @@
 "use client"
 
+import type React from "react"
+
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { User, Lock, AlertCircle } from "lucide-react"
-import { loginAction } from "./actions"
 
 export default function LoginPage() {
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
+  const router = useRouter()
 
-  async function handleSubmit(formData: FormData) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
     setLoading(true)
     setError("")
 
-    try {
-      const result = await loginAction(formData)
+    const formData = new FormData(e.currentTarget)
+    const username = formData.get("username") as string
+    const password = formData.get("password") as string
 
-      if (result?.error) {
-        setError(result.error)
-        setLoading(false)
+    try {
+      const response = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      })
+
+      const result = await response.json()
+
+      if (response.ok) {
+        router.push("/admin")
+      } else {
+        setError(result.error || "Error al iniciar sesión")
       }
-      // Si no hay error, el redirect se maneja en la server action
     } catch (err) {
-      setError("Error al iniciar sesión")
+      setError("Error de conexión")
+    } finally {
       setLoading(false)
     }
   }
@@ -50,7 +67,7 @@ export default function LoginPage() {
             </Alert>
           )}
 
-          <form action={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="username">Usuario</Label>
               <div className="relative">
