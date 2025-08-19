@@ -1,22 +1,22 @@
-import { type NextRequest, NextResponse } from "next/server"
 import { logout } from "@/lib/auth"
+import { NextResponse } from "next/server"
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
-    console.log("Logout route called")
     await logout()
-    console.log("Logout successful, redirecting to login")
-
-    // Crear respuesta de redirección
-    const response = NextResponse.redirect(new URL("/admin/login", request.url))
-
-    // Eliminar cookies manualmente también
-    response.cookies.delete("session")
-    response.cookies.delete("admin-session")
-
-    return response
+    return NextResponse.redirect(new URL("/admin/login", process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"))
   } catch (error) {
     console.error("Logout error:", error)
-    return NextResponse.redirect(new URL("/admin/login", request.url))
+    return NextResponse.redirect(new URL("/admin/login", process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"))
+  }
+}
+
+export async function POST() {
+  try {
+    await logout()
+    return NextResponse.json({ success: true })
+  } catch (error) {
+    console.error("Logout error:", error)
+    return NextResponse.json({ error: "Error al cerrar sesión" }, { status: 500 })
   }
 }
