@@ -94,6 +94,30 @@ Cualquier duda o consulta respecto del proceso y el comienzo del beneficio, por 
   },
 ]
 
+// Authentication functions
+export async function authenticateUser(username: string, password: string): Promise<User | null> {
+  const user = users.find((u) => u.username === username && verifyPassword(password, u.password))
+  return user || null
+}
+
+export async function createSession(user: User) {
+  const cookieStore = cookies()
+  cookieStore.set(
+    "admin-session",
+    JSON.stringify({
+      userId: user.id,
+      username: user.username,
+      role: user.role,
+    }),
+    {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+    },
+  )
+}
+
 export async function login(username: string, password: string) {
   const user = users.find((u) => u.username === username && verifyPassword(password, u.password))
 
@@ -114,11 +138,12 @@ export async function login(username: string, password: string) {
 export async function logout() {
   const cookieStore = cookies()
   cookieStore.delete("session")
+  cookieStore.delete("admin-session")
 }
 
 export async function getSession() {
   const cookieStore = cookies()
-  const session = cookieStore.get("session")
+  const session = cookieStore.get("session") || cookieStore.get("admin-session")
 
   if (session) {
     try {
@@ -191,6 +216,7 @@ export async function createUser(data: Omit<User, "id" | "createdAt">): Promise<
   const newUser: User = {
     ...data,
     id: Date.now().toString(),
+    password: hashPassword(data.password),
     createdAt: new Date().toISOString(),
   }
   users.push(newUser)

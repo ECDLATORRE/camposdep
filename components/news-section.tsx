@@ -1,169 +1,219 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, Sparkles } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import { Calendar, User, ArrowRight, Sparkles } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
+
+interface NewsItem {
+  id: string
+  title: string
+  excerpt: string
+  image: string
+  category: string
+  author: string
+  publishedAt: string
+  readTime: string
+}
+
+const newsData: NewsItem[] = [
+  {
+    id: "1",
+    title: "Estudiantes beneficiarios del transporte escolar año 2023",
+    excerpt:
+      "Estimada comunidad educativa, les compartimos la nómina de estudiantes beneficiarios del transporte escolar año 2023.",
+    image: "/images/noticia-transporte.png",
+    category: "estudiantes",
+    author: "AdminNicolas",
+    publishedAt: "2023-03-02",
+    readTime: "3 min",
+  },
+  {
+    id: "2",
+    title: "Inicio de año escolar 2025",
+    excerpt:
+      "Información importante para el inicio del nuevo año académico. Todos los estudiantes deben presentarse el día 06 de marzo a las 8:30 hrs.",
+    image: "/images/escuela-exterior.jpg",
+    category: "estudiantes",
+    author: "AdminNicolas",
+    publishedAt: "2025-03-06",
+    readTime: "2 min",
+  },
+  {
+    id: "3",
+    title: "Período de matrículas abiertas",
+    excerpt:
+      "El proceso de matrícula para nuevos estudiantes estará abierto desde el 05 de marzo hasta el 30 de marzo.",
+    image: "/images/patio-escuela-estudiantes.jpg",
+    category: "apoderados",
+    author: "AdminNicolas",
+    publishedAt: "2025-03-05",
+    readTime: "4 min",
+  },
+  {
+    id: "4",
+    title: "Reunión de profesores - Planificación 2025",
+    excerpt: "Convocatoria a todos los docentes para la reunión de planificación del año académico 2025.",
+    image: "/images/director-layo-gomez.jpg",
+    category: "profesores",
+    author: "Dirección",
+    publishedAt: "2025-02-28",
+    readTime: "2 min",
+  },
+  {
+    id: "5",
+    title: "Torneo de básquetbol inter-escolar",
+    excerpt: "Nuestro equipo de básquetbol participará en el torneo regional. ¡Apoyemos a nuestros deportistas!",
+    image: "/images/basket.jpg",
+    category: "deportivos",
+    author: "Coordinador Deportivo",
+    publishedAt: "2025-03-01",
+    readTime: "3 min",
+  },
+  {
+    id: "6",
+    title: "Mejoras en infraestructura escolar",
+    excerpt:
+      "Se han completado las mejoras en el techado de la cancha principal, beneficiando a toda la comunidad educativa.",
+    image: "/images/techo2.jpg",
+    category: "comunidad",
+    author: "Administración",
+    publishedAt: "2025-02-25",
+    readTime: "5 min",
+  },
+]
+
+const categories = [
+  { id: "todos", label: "Todos", color: "bg-slate-100 text-slate-700 hover:bg-slate-200" },
+  { id: "estudiantes", label: "Estudiantes", color: "bg-blue-100 text-blue-700 hover:bg-blue-200" },
+  { id: "profesores", label: "Profesores", color: "bg-green-100 text-green-700 hover:bg-green-200" },
+  { id: "apoderados", label: "Apoderados", color: "bg-purple-100 text-purple-700 hover:bg-purple-200" },
+  { id: "comunidad", label: "Comunidad", color: "bg-orange-100 text-orange-700 hover:bg-orange-200" },
+  { id: "deportivos", label: "Deportivos", color: "bg-red-100 text-red-700 hover:bg-red-200" },
+]
 
 export function NewsSection() {
-  const [activeTab, setActiveTab] = useState("estudiantes")
-  const [newsData, setNewsData] = useState<any[]>([])
+  const [activeCategory, setActiveCategory] = useState("todos")
 
-  const tabs = [
-    { id: "estudiantes", label: "Estudiantes" },
-    { id: "profesores", label: "Profesores" },
-    { id: "apoderados", label: "Apoderados" },
-    { id: "comunidad", label: "Comunidad Educativa" },
-    { id: "deportivos", label: "Deportivos" },
-  ]
+  const filteredNews =
+    activeCategory === "todos" ? newsData : newsData.filter((item) => item.category === activeCategory)
 
-  // Datos de ejemplo para mostrar mientras no hay noticias en la base de datos
-  const sampleNews = {
-    estudiantes: [
-      {
-        id: "1",
-        title: "Estudiantes beneficiarios del transporte escolar año 2023",
-        excerpt:
-          "Estimada comunidad educativa, les compartimos la nómina de estudiantes beneficiarios del transporte escolar año 2023.",
-        image: "/images/noticia-transporte.png",
-        date: "02 MAR",
-        author: "AdminNicolas",
-      },
-      {
-        id: "2",
-        title: "Inicio de año escolar 2025",
-        excerpt: "Información importante para el inicio del nuevo año académico.",
-        image: "/placeholder.svg?height=200&width=300",
-        date: "06 MAR",
-        author: "AdminNicolas",
-      },
-      {
-        id: "3",
-        title: "Período de matrículas abiertas",
-        excerpt: "Proceso de matrícula para nuevos estudiantes.",
-        image: "/placeholder.svg?height=200&width=300",
-        date: "05 MAR",
-        author: "AdminNicolas",
-      },
-    ],
-    profesores: [
-      {
-        id: "4",
-        title: "Capacitación docente 2025",
-        excerpt: "Jornada de actualización pedagógica para el cuerpo docente.",
-        image: "/placeholder.svg?height=200&width=300",
-        date: "15 FEB",
-        author: "AdminNicolas",
-      },
-    ],
-    apoderados: [
-      {
-        id: "5",
-        title: "Reunión de apoderados",
-        excerpt: "Primera reunión del año con padres y apoderados.",
-        image: "/placeholder.svg?height=200&width=300",
-        date: "20 MAR",
-        author: "AdminNicolas",
-      },
-    ],
-    comunidad: [
-      {
-        id: "6",
-        title: "Actividades comunitarias",
-        excerpt: "Programa de actividades para toda la comunidad educativa.",
-        image: "/placeholder.svg?height=200&width=300",
-        date: "25 MAR",
-        author: "AdminNicolas",
-      },
-    ],
-    deportivos: [
-      {
-        id: "7",
-        title: "Campeonato interescolar",
-        excerpt: "Participación en competencias deportivas regionales.",
-        image: "/placeholder.svg?height=200&width=300",
-        date: "30 MAR",
-        author: "AdminNicolas",
-      },
-    ],
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString)
+    return date.toLocaleDateString("es-ES", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    })
   }
 
-  useEffect(() => {
-    // Aquí podrías hacer una llamada a la API para obtener las noticias reales
-    // Por ahora usamos los datos de ejemplo
-    setNewsData(sampleNews[activeTab as keyof typeof sampleNews] || [])
-  }, [activeTab])
-
   return (
-    <section className="py-20 bg-gradient-to-br from-[#039b9e]/10 via-[#028a8e]/5 to-[#039b9e]/10 relative overflow-hidden">
+    <section className="py-20 bg-gradient-to-br from-slate-50 via-white to-[#039b9e]/5 relative overflow-hidden">
       {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <Sparkles className="absolute top-20 left-20 h-6 w-6 text-[#039b9e]/20 animate-pulse" />
-        <Sparkles className="absolute bottom-20 right-20 h-4 w-4 text-[#028a8e]/30 animate-pulse delay-1000" />
-        <Sparkles className="absolute top-1/2 left-1/4 h-5 w-5 text-[#039b9e]/15 animate-pulse delay-500" />
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-10 text-[#039b9e]/10 animate-pulse">
+          <Sparkles size={24} />
+        </div>
+        <div className="absolute top-40 right-20 text-[#039b9e]/10 animate-pulse delay-1000">
+          <Sparkles size={32} />
+        </div>
+        <div className="absolute bottom-20 left-1/4 text-[#039b9e]/10 animate-pulse delay-2000">
+          <Sparkles size={28} />
+        </div>
       </div>
 
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="text-center mb-16 animate-fade-in-up">
-          <h2 className="text-3xl lg:text-4xl font-bold text-slate-800 mb-4">Últimas Noticias</h2>
-          <p className="text-xl text-slate-600">
-            Mantente informado sobre las actividades de nuestra comunidad educativa
+      <div className="container mx-auto px-4 relative">
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 bg-[#039b9e]/10 text-[#039b9e] px-4 py-2 rounded-full text-sm font-medium mb-4">
+            <Sparkles className="h-4 w-4" />
+            Últimas Noticias
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold text-slate-800 mb-4">
+            Mantente <span className="text-[#039b9e]">Informado</span>
+          </h2>
+          <p className="text-xl text-slate-600 max-w-2xl mx-auto">
+            Descubre las últimas novedades, eventos y logros de nuestra comunidad educativa
           </p>
         </div>
 
-        {/* Tabs */}
-        <div className="flex flex-wrap justify-center gap-2 mb-12 animate-fade-in delay-300">
-          {tabs.map((tab, index) => (
+        {/* Category filters */}
+        <div className="flex flex-wrap justify-center gap-3 mb-12">
+          {categories.map((category) => (
             <Button
-              key={tab.id}
-              variant={activeTab === tab.id ? "default" : "outline"}
-              onClick={() => setActiveTab(tab.id)}
-              className={`transition-all duration-300 hover:scale-105 ${
-                activeTab === tab.id
-                  ? "bg-[#039b9e] hover:bg-[#028a8e] shadow-lg"
-                  : "border-[#039b9e]/30 text-[#039b9e] hover:bg-[#039b9e]/10 hover:border-[#039b9e]"
-              }`}
-              style={{ animationDelay: `${index * 100}ms` }}
+              key={category.id}
+              variant={activeCategory === category.id ? "default" : "outline"}
+              onClick={() => setActiveCategory(category.id)}
+              className={`
+                transition-all duration-300 hover:scale-105
+                ${
+                  activeCategory === category.id
+                    ? "bg-[#039b9e] hover:bg-[#028a8e] text-white shadow-lg"
+                    : `${category.color} border-transparent`
+                }
+              `}
             >
-              {tab.label}
+              {category.label}
             </Button>
           ))}
         </div>
 
-        {/* News Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {newsData.map((item, index) => (
+        {/* News grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+          {filteredNews.slice(0, 6).map((item, index) => (
             <Card
               key={item.id}
-              className="group hover:shadow-2xl transition-all duration-500 border-0 shadow-lg overflow-hidden hover:-translate-y-2 animate-fade-in-up cursor-pointer"
-              style={{ animationDelay: `${index * 150}ms` }}
+              className="group hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 bg-white/80 backdrop-blur-sm border-0 shadow-lg overflow-hidden"
+              style={{ animationDelay: `${index * 100}ms` }}
             >
               <div className="relative overflow-hidden">
-                <img
+                <Image
                   src={item.image || "/placeholder.svg"}
                   alt={item.title}
-                  className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+                  width={400}
+                  height={240}
+                  className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="absolute top-4 left-4 bg-[#039b9e] text-white px-3 py-1 rounded-lg text-sm font-semibold transform group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                  {item.date}
-                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <Badge
+                  className={`absolute top-4 left-4 ${
+                    categories.find((cat) => cat.id === item.category)?.color || "bg-slate-100 text-slate-700"
+                  } border-0 shadow-md`}
+                >
+                  {categories.find((cat) => cat.id === item.category)?.label}
+                </Badge>
               </div>
-              <CardContent className="p-6 space-y-4">
-                <h3 className="text-xl font-bold text-slate-800 group-hover:text-[#039b9e] transition-colors duration-300 line-clamp-2">
+
+              <CardContent className="p-6">
+                <div className="flex items-center gap-4 text-sm text-slate-500 mb-3">
+                  <div className="flex items-center gap-1">
+                    <Calendar className="h-4 w-4" />
+                    {formatDate(item.publishedAt)}
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <User className="h-4 w-4" />
+                    {item.author}
+                  </div>
+                </div>
+
+                <h3 className="font-bold text-lg text-slate-800 mb-3 line-clamp-2 group-hover:text-[#039b9e] transition-colors">
                   {item.title}
                 </h3>
-                <p className="text-slate-600 leading-relaxed line-clamp-3">{item.excerpt}</p>
 
-                <div className="flex flex-col space-y-2">
+                <p className="text-slate-600 text-sm line-clamp-3 mb-4">{item.excerpt}</p>
+
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-slate-400">{item.readTime} de lectura</span>
                   <Link href={`/noticias/${item.id}`}>
                     <Button
                       variant="ghost"
-                      className="text-[#039b9e] hover:text-[#028a8e] p-0 group-hover:translate-x-2 transition-transform duration-300 justify-start"
+                      size="sm"
+                      className="text-[#039b9e] hover:text-[#028a8e] hover:bg-[#039b9e]/10 p-0 h-auto font-medium group/btn"
                     >
-                      Ver noticia completa{" "}
-                      <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
+                      Leer más
+                      <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
                     </Button>
                   </Link>
                 </div>
@@ -172,14 +222,15 @@ export function NewsSection() {
           ))}
         </div>
 
-        <div className="text-center mt-12 animate-fade-in delay-1000">
+        {/* View all news button */}
+        <div className="text-center">
           <Link href="/noticias">
             <Button
               size="lg"
-              variant="outline"
-              className="border-[#039b9e] text-[#039b9e] hover:bg-[#039b9e] hover:text-white transition-all duration-300 hover:scale-105 hover:shadow-lg bg-transparent"
+              className="bg-[#039b9e] hover:bg-[#028a8e] text-white px-8 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group"
             >
               Ver todas las noticias
+              <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
             </Button>
           </Link>
         </div>
