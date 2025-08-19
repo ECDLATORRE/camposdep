@@ -41,20 +41,20 @@ export function Hero() {
                 />
               </div>
 
-              {/* Lirmi Logo */}
+              {/* Lirmi Logo - Circular */}
               <a
                 href="https://lms.lirmi.com/login"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:scale-110 transition-transform duration-300"
               >
-                <div className="relative w-20 h-20 hover:shadow-2xl transition-shadow duration-300">
+                <div className="relative w-20 h-20 rounded-full overflow-hidden bg-white p-2 hover:shadow-2xl transition-shadow duration-300 border-2 border-white/20">
                   <Image
                     src="/images/lirmi-logo.png"
                     alt="Lirmi - Plataforma Educativa"
                     fill
                     style={{ objectFit: "contain" }}
-                    className="drop-shadow-2xl"
+                    className="drop-shadow-lg"
                   />
                 </div>
               </a>
