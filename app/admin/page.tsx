@@ -1,183 +1,212 @@
-import { cookies } from "next/headers"
-import { redirect } from "next/navigation"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { requireAuth, getAllNews, getUsers } from "@/lib/auth"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Users, FileText, LogOut, BarChart3, Calendar, Settings } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import { Users, FileText, LogOut, Plus, Images, BarChart3, Calendar, Bell } from "lucide-react"
 import Link from "next/link"
 
-async function getSession() {
-  const cookieStore = await cookies()
-  const session = cookieStore.get("admin-session")
-
-  console.log("Checking session:", session) // Debug
-
-  if (!session) {
-    console.log("No session found") // Debug
-    return null
-  }
-
-  try {
-    const parsed = JSON.parse(session.value)
-    console.log("Session parsed:", parsed) // Debug
-    return parsed
-  } catch (error) {
-    console.log("Session parse error:", error) // Debug
-    return null
-  }
-}
-
 export default async function AdminDashboard() {
-  const session = await getSession()
+  const session = await requireAuth()
+  const news = await getAllNews()
+  const users = await getUsers()
 
-  if (!session) {
-    console.log("Redirecting to login") // Debug
-    redirect("/admin/login")
+  const stats = {
+    totalNews: news.length,
+    publishedNews: news.filter((n) => n.status === "published").length,
+    draftNews: news.filter((n) => n.status === "draft").length,
+    totalUsers: users.length,
   }
-
-  console.log("Rendering dashboard for user:", session.username) // Debug
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <div className="w-8 h-8 bg-gradient-to-r from-[#039b9e] to-[#028a8e] rounded-lg flex items-center justify-center mr-3">
-                <Settings className="w-5 h-5 text-white" />
-              </div>
-              <h1 className="text-xl font-semibold text-gray-900">Panel de Administración</h1>
+      <div className="bg-white shadow-sm border-b">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-2xl font-bold text-slate-800">Panel de Administración</h1>
+              <p className="text-slate-600">Bienvenido, {session.username}</p>
             </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-600">Bienvenido, {session.username}</span>
+            <div className="flex items-center space-x-2">
+              <Badge variant={session.role === "admin" ? "default" : "secondary"}>
+                {session.role === "admin" ? "Administrador" : "Editor"}
+              </Badge>
               <Link href="/admin/logout">
                 <Button variant="outline" size="sm">
-                  <LogOut className="w-4 h-4 mr-2" />
+                  <LogOut className="h-4 w-4 mr-2" />
                   Cerrar Sesión
                 </Button>
               </Link>
             </div>
           </div>
         </div>
-      </header>
+      </div>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
-          {/* Welcome Section */}
-          <div className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Dashboard</h2>
-            <p className="text-gray-600">Gestiona el contenido y usuarios de la Escuela Campos Deportivos</p>
-          </div>
+      <div className="container mx-auto px-4 py-8">
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <Card className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-blue-100 text-sm font-medium">Total Noticias</p>
+                  <p className="text-3xl font-bold">{stats.totalNews}</p>
+                </div>
+                <FileText className="h-8 w-8 text-blue-200" />
+              </div>
+            </CardContent>
+          </Card>
 
-          {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Noticias</CardTitle>
-                <FileText className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-[#039b9e]">12</div>
-                <p className="text-xs text-muted-foreground">+2 desde el mes pasado</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Usuarios Activos</CardTitle>
-                <Users className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-[#039b9e]">3</div>
-                <p className="text-xs text-muted-foreground">Administradores y editores</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Visitas del Mes</CardTitle>
-                <BarChart3 className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-[#039b9e]">1,234</div>
-                <p className="text-xs text-muted-foreground">+15% desde el mes pasado</p>
-              </CardContent>
-            </Card>
-          </div>
+          <Card className="bg-gradient-to-r from-green-500 to-green-600 text-white">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-green-100 text-sm font-medium">Publicadas</p>
+                  <p className="text-3xl font-bold">{stats.publishedNews}</p>
+                </div>
+                <Bell className="h-8 w-8 text-green-200" />
+              </div>
+            </CardContent>
+          </Card>
 
-          {/* Quick Actions */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Card className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <FileText className="w-5 h-5 mr-2 text-[#039b9e]" />
+          <Card className="bg-gradient-to-r from-yellow-500 to-yellow-600 text-white">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-yellow-100 text-sm font-medium">Borradores</p>
+                  <p className="text-3xl font-bold">{stats.draftNews}</p>
+                </div>
+                <Calendar className="h-8 w-8 text-yellow-200" />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gradient-to-r from-purple-500 to-purple-600 text-white">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-purple-100 text-sm font-medium">Usuarios</p>
+                  <p className="text-3xl font-bold">{stats.totalUsers}</p>
+                </div>
+                <Users className="h-8 w-8 text-purple-200" />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Quick Actions */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+            <Link href="/admin/noticias">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center text-lg">
+                  <FileText className="h-5 w-5 mr-2 text-[#039b9e]" />
                   Gestionar Noticias
                 </CardTitle>
-                <CardDescription>Crear, editar y eliminar noticias del sitio web</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-2">
-                  <Link href="/admin/noticias">
-                    <Button className="w-full bg-[#039b9e] hover:bg-[#028a8e]">Ver Todas las Noticias</Button>
-                  </Link>
+                <p className="text-slate-600 text-sm mb-4">Crear, editar y administrar las noticias del sitio web</p>
+                <div className="flex space-x-2">
                   <Link href="/admin/noticias/nueva">
-                    <Button variant="outline" className="w-full bg-transparent">
-                      Crear Nueva Noticia
+                    <Button size="sm" className="bg-[#039b9e] hover:bg-[#028a8e]">
+                      <Plus className="h-4 w-4 mr-1" />
+                      Nueva
+                    </Button>
+                  </Link>
+                  <Link href="/admin/noticias">
+                    <Button size="sm" variant="outline">
+                      Ver todas
                     </Button>
                   </Link>
                 </div>
               </CardContent>
-            </Card>
+            </Link>
+          </Card>
 
-            <Card className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Users className="w-5 h-5 mr-2 text-[#039b9e]" />
-                  Gestionar Usuarios
+          <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+            <Link href="/admin/galeria">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center text-lg">
+                  <Images className="h-5 w-5 mr-2 text-[#039b9e]" />
+                  Galería de Archivos
                 </CardTitle>
-                <CardDescription>Administrar usuarios y permisos del sistema</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-2">
-                  <Link href="/admin/usuarios">
-                    <Button className="w-full bg-[#039b9e] hover:bg-[#028a8e]">Ver Todos los Usuarios</Button>
-                  </Link>
-                  <Link href="/admin/usuarios/nuevo">
-                    <Button variant="outline" className="w-full bg-transparent">
-                      Crear Nuevo Usuario
-                    </Button>
-                  </Link>
-                </div>
+                <p className="text-slate-600 text-sm mb-4">Administrar imágenes y archivos multimedia</p>
+                <Link href="/admin/galeria">
+                  <Button size="sm" className="bg-[#039b9e] hover:bg-[#028a8e]">
+                    <Images className="h-4 w-4 mr-1" />
+                    Abrir Galería
+                  </Button>
+                </Link>
               </CardContent>
-            </Card>
+            </Link>
+          </Card>
 
-            <Card className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Calendar className="w-5 h-5 mr-2 text-[#039b9e]" />
-                  Actividades Recientes
-                </CardTitle>
-                <CardDescription>Últimas acciones realizadas en el sistema</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex items-center text-sm">
-                    <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                    <span className="text-gray-600">Noticia creada hace 2 horas</span>
+          {session.role === "admin" && (
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+              <Link href="/admin/usuarios">
+                <CardHeader className="pb-3">
+                  <CardTitle className="flex items-center text-lg">
+                    <Users className="h-5 w-5 mr-2 text-[#039b9e]" />
+                    Gestionar Usuarios
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-slate-600 text-sm mb-4">Administrar usuarios y permisos del sistema</p>
+                  <div className="flex space-x-2">
+                    <Link href="/admin/usuarios/nuevo">
+                      <Button size="sm" className="bg-[#039b9e] hover:bg-[#028a8e]">
+                        <Plus className="h-4 w-4 mr-1" />
+                        Nuevo
+                      </Button>
+                    </Link>
+                    <Link href="/admin/usuarios">
+                      <Button size="sm" variant="outline">
+                        Ver todos
+                      </Button>
+                    </Link>
                   </div>
-                  <div className="flex items-center text-sm">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
-                    <span className="text-gray-600">Usuario editado hace 1 día</span>
-                  </div>
-                  <div className="flex items-center text-sm">
-                    <div className="w-2 h-2 bg-yellow-500 rounded-full mr-2"></div>
-                    <span className="text-gray-600">Imagen subida hace 3 días</span>
-                  </div>
-                </div>
-              </CardContent>
+                </CardContent>
+              </Link>
             </Card>
-          </div>
+          )}
         </div>
-      </main>
+
+        {/* Recent News */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center">
+              <BarChart3 className="h-5 w-5 mr-2" />
+              Noticias Recientes
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {news.slice(0, 5).map((item) => (
+                <div key={item.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div className="flex-1">
+                    <h4 className="font-medium text-slate-800">{item.title}</h4>
+                    <p className="text-sm text-slate-500">
+                      {new Date(item.publishedAt).toLocaleDateString("es-ES")} • {item.author}
+                    </p>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Badge variant={item.status === "published" ? "default" : "secondary"}>
+                      {item.status === "published" ? "Publicada" : "Borrador"}
+                    </Badge>
+                    <Link href={`/admin/noticias/editar/${item.id}`}>
+                      <Button size="sm" variant="outline">
+                        Editar
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   )
 }

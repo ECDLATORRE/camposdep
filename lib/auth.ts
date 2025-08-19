@@ -1,5 +1,6 @@
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
+import crypto from "crypto"
 
 export interface User {
   id: string
@@ -22,10 +23,14 @@ export interface NewsItem {
   status: "published" | "draft"
 }
 
-// Simple authentication utilities
+// Secure password hashing with salt
+const SALT = "escuela-campos-deportivos-salt-2024"
+
 export function hashPassword(password: string): string {
-  // In a real app, use bcrypt or similar
-  return Buffer.from(password).toString("base64")
+  return crypto
+    .createHash("sha256")
+    .update(password + SALT)
+    .digest("hex")
 }
 
 export function verifyPassword(password: string, hash: string): boolean {
@@ -37,7 +42,7 @@ const users: User[] = [
   {
     id: "1",
     username: "AdminNicolas",
-    password: hashPassword("latorre"), // latorre
+    password: hashPassword("latorre"),
     role: "admin",
     createdAt: new Date().toISOString(),
   },
@@ -96,63 +101,78 @@ Cualquier duda o consulta respecto del proceso y el comienzo del beneficio, por 
 
 // Authentication functions
 export async function authenticateUser(username: string, password: string): Promise<User | null> {
-  const user = users.find((u) => u.username === username && verifyPassword(password, u.password))
-  return user || null
+  console.log("Authenticating user:", username)
+  const user = users.find((u) => u.username === username)
+
+  if (!user) {
+    console.log("User not found")
+    return null
+  }
+
+  const isValidPassword = verifyPassword(password, user.password)
+  console.log("Password valid:", isValidPassword)
+
+  return isValidPassword ? user : null
 }
 
 export async function createSession(user: User) {
-  const cookieStore = cookies()
-  cookieStore.set(
-    "admin-session",
-    JSON.stringify({
-      userId: user.id,
-      username: user.username,
-      role: user.role,
-    }),
-    {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 60 * 60 * 24 * 7, // 7 days
-    },
-  )
+  console.log("Creating session for user:", user.username)
+  const cookieStore = await cookies()
+
+  const sessionData = {
+    userId: user.id,
+    username: user.username,
+    role: user.role,
+  }
+
+  cookieStore.set("admin-session", JSON.stringify(sessionData), {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 60 * 60 * 24 * 7, // 7 days
+    path: "/",
+  })
+
+  console.log("Session created successfully")
 }
 
 export async function login(username: string, password: string) {
-  const user = users.find((u) => u.username === username && verifyPassword(password, u.password))
+  console.log("Login attempt for:", username)
+  const user = await authenticateUser(username, password)
 
   if (user) {
-    const cookieStore = cookies()
-    cookieStore.set("session", JSON.stringify({ userId: user.id, username: user.username }), {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 60 * 60 * 24 * 7, // 7 días
-    })
-    return { success: true, user: { id: user.id, username: user.username } }
+    await createSession(user)
+    console.log("Login successful")
+    return { success: true, user: { id: user.id, username: user.username, role: user.role } }
   }
 
+  console.log("Login failed")
   return { success: false, error: "Credenciales inválidas" }
 }
 
 export async function logout() {
-  const cookieStore = cookies()
+  console.log("Logging out user")
+  const cookieStore = await cookies()
   cookieStore.delete("session")
   cookieStore.delete("admin-session")
 }
 
 export async function getSession() {
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
   const session = cookieStore.get("session") || cookieStore.get("admin-session")
 
   if (session) {
     try {
-      return JSON.parse(session.value)
-    } catch {
+      const sessionData = JSON.parse(session.value)
+      console.log("Session found:", sessionData.username)
+      return sessionData
+    } catch (error) {
+      console.log("Error parsing session:", error)
       return null
     }
   }
 
+  console.log("No session found")
   return null
 }
 
@@ -160,6 +180,7 @@ export async function requireAuth() {
   const session = await getSession()
 
   if (!session) {
+    console.log("No session, redirecting to login")
     redirect("/admin/login")
   }
 
@@ -207,9 +228,13 @@ export async function deleteNews(id: string): Promise<boolean> {
   return false
 }
 
-// Funciones para manejar usuarios
-export async function getAllUsers(): Promise<Omit<User, "password">[]> {
+// Funciones para manejar usuarios - CORREGIDO: Agregué getUsers como alias
+export async function getUsers(): Promise<Omit<User, "password">[]> {
   return users.map((u) => ({ id: u.id, username: u.username, role: u.role, createdAt: u.createdAt }))
+}
+
+export async function getAllUsers(): Promise<Omit<User, "password">[]> {
+  return getUsers()
 }
 
 export async function createUser(data: Omit<User, "id" | "createdAt">): Promise<Omit<User, "password">> {

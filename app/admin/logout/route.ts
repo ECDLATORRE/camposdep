@@ -1,16 +1,22 @@
-import { cookies } from "next/headers"
-import { NextResponse } from "next/server"
+import { type NextRequest, NextResponse } from "next/server"
+import { logout } from "@/lib/auth"
 
-export async function GET() {
-  const cookieStore = await cookies()
-  cookieStore.delete("admin-session")
+export async function GET(request: NextRequest) {
+  try {
+    console.log("Logout route called")
+    await logout()
+    console.log("Logout successful, redirecting to login")
 
-  return NextResponse.redirect(new URL("/admin/login", process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"))
-}
+    // Crear respuesta de redirección
+    const response = NextResponse.redirect(new URL("/admin/login", request.url))
 
-export async function POST() {
-  const cookieStore = await cookies()
-  cookieStore.delete("admin-session")
+    // Eliminar cookies manualmente también
+    response.cookies.delete("session")
+    response.cookies.delete("admin-session")
 
-  return NextResponse.redirect(new URL("/admin/login", process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"))
+    return response
+  } catch (error) {
+    console.error("Logout error:", error)
+    return NextResponse.redirect(new URL("/admin/login", request.url))
+  }
 }
