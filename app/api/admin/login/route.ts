@@ -28,6 +28,8 @@ export async function POST(request: NextRequest) {
   try {
     const { username, password } = await request.json()
 
+    console.log("Login attempt:", { username, password }) // Debug
+
     if (!username || !password) {
       return NextResponse.json({ error: "Usuario y contraseña son requeridos" }, { status: 400 })
     }
@@ -35,11 +37,14 @@ export async function POST(request: NextRequest) {
     const user = users.find((u) => u.username === username && verifyPassword(password, u.password))
 
     if (!user) {
+      console.log("User not found or password incorrect") // Debug
       return NextResponse.json({ error: "Usuario o contraseña incorrectos" }, { status: 401 })
     }
 
+    console.log("User authenticated successfully:", user.username) // Debug
+
     // Set secure cookie
-    const cookieStore = cookies()
+    const cookieStore = await cookies()
     cookieStore.set(
       "admin-session",
       JSON.stringify({
@@ -52,6 +57,7 @@ export async function POST(request: NextRequest) {
         secure: process.env.NODE_ENV === "production",
         sameSite: "lax",
         maxAge: 60 * 60 * 24 * 7, // 7 days
+        path: "/",
       },
     )
 
@@ -64,6 +70,7 @@ export async function POST(request: NextRequest) {
       },
     })
   } catch (error) {
+    console.error("Login error:", error) // Debug
     return NextResponse.json({ error: "Error interno del servidor" }, { status: 500 })
   }
 }

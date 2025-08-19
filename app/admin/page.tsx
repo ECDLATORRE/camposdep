@@ -6,16 +6,22 @@ import { Users, FileText, LogOut, BarChart3, Calendar, Settings } from "lucide-r
 import Link from "next/link"
 
 async function getSession() {
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
   const session = cookieStore.get("admin-session")
 
+  console.log("Checking session:", session) // Debug
+
   if (!session) {
+    console.log("No session found") // Debug
     return null
   }
 
   try {
-    return JSON.parse(session.value)
-  } catch {
+    const parsed = JSON.parse(session.value)
+    console.log("Session parsed:", parsed) // Debug
+    return parsed
+  } catch (error) {
+    console.log("Session parse error:", error) // Debug
     return null
   }
 }
@@ -24,8 +30,11 @@ export default async function AdminDashboard() {
   const session = await getSession()
 
   if (!session) {
+    console.log("Redirecting to login") // Debug
     redirect("/admin/login")
   }
+
+  console.log("Rendering dashboard for user:", session.username) // Debug
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -34,19 +43,19 @@ export default async function AdminDashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-green-600 rounded-lg flex items-center justify-center mr-3">
+              <div className="w-8 h-8 bg-gradient-to-r from-[#039b9e] to-[#028a8e] rounded-lg flex items-center justify-center mr-3">
                 <Settings className="w-5 h-5 text-white" />
               </div>
               <h1 className="text-xl font-semibold text-gray-900">Panel de Administración</h1>
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-sm text-gray-600">Bienvenido, {session.username}</span>
-              <form action="/admin/logout" method="POST">
-                <Button variant="outline" size="sm" type="submit">
+              <Link href="/admin/logout">
+                <Button variant="outline" size="sm">
                   <LogOut className="w-4 h-4 mr-2" />
                   Cerrar Sesión
                 </Button>
-              </form>
+              </Link>
             </div>
           </div>
         </div>
@@ -69,7 +78,7 @@ export default async function AdminDashboard() {
                 <FileText className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">12</div>
+                <div className="text-2xl font-bold text-[#039b9e]">12</div>
                 <p className="text-xs text-muted-foreground">+2 desde el mes pasado</p>
               </CardContent>
             </Card>
@@ -79,7 +88,7 @@ export default async function AdminDashboard() {
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">3</div>
+                <div className="text-2xl font-bold text-[#039b9e]">3</div>
                 <p className="text-xs text-muted-foreground">Administradores y editores</p>
               </CardContent>
             </Card>
@@ -89,7 +98,7 @@ export default async function AdminDashboard() {
                 <BarChart3 className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">1,234</div>
+                <div className="text-2xl font-bold text-[#039b9e]">1,234</div>
                 <p className="text-xs text-muted-foreground">+15% desde el mes pasado</p>
               </CardContent>
             </Card>
@@ -100,7 +109,7 @@ export default async function AdminDashboard() {
             <Card className="hover:shadow-lg transition-shadow">
               <CardHeader>
                 <CardTitle className="flex items-center">
-                  <FileText className="w-5 h-5 mr-2 text-blue-600" />
+                  <FileText className="w-5 h-5 mr-2 text-[#039b9e]" />
                   Gestionar Noticias
                 </CardTitle>
                 <CardDescription>Crear, editar y eliminar noticias del sitio web</CardDescription>
@@ -108,7 +117,7 @@ export default async function AdminDashboard() {
               <CardContent>
                 <div className="space-y-2">
                   <Link href="/admin/noticias">
-                    <Button className="w-full">Ver Todas las Noticias</Button>
+                    <Button className="w-full bg-[#039b9e] hover:bg-[#028a8e]">Ver Todas las Noticias</Button>
                   </Link>
                   <Link href="/admin/noticias/nueva">
                     <Button variant="outline" className="w-full bg-transparent">
@@ -122,7 +131,7 @@ export default async function AdminDashboard() {
             <Card className="hover:shadow-lg transition-shadow">
               <CardHeader>
                 <CardTitle className="flex items-center">
-                  <Users className="w-5 h-5 mr-2 text-green-600" />
+                  <Users className="w-5 h-5 mr-2 text-[#039b9e]" />
                   Gestionar Usuarios
                 </CardTitle>
                 <CardDescription>Administrar usuarios y permisos del sistema</CardDescription>
@@ -130,7 +139,7 @@ export default async function AdminDashboard() {
               <CardContent>
                 <div className="space-y-2">
                   <Link href="/admin/usuarios">
-                    <Button className="w-full">Ver Todos los Usuarios</Button>
+                    <Button className="w-full bg-[#039b9e] hover:bg-[#028a8e]">Ver Todos los Usuarios</Button>
                   </Link>
                   <Link href="/admin/usuarios/nuevo">
                     <Button variant="outline" className="w-full bg-transparent">
@@ -144,7 +153,7 @@ export default async function AdminDashboard() {
             <Card className="hover:shadow-lg transition-shadow">
               <CardHeader>
                 <CardTitle className="flex items-center">
-                  <Calendar className="w-5 h-5 mr-2 text-purple-600" />
+                  <Calendar className="w-5 h-5 mr-2 text-[#039b9e]" />
                   Actividades Recientes
                 </CardTitle>
                 <CardDescription>Últimas acciones realizadas en el sistema</CardDescription>

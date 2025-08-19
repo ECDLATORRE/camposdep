@@ -1,29 +1,16 @@
+import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
 
 export async function GET() {
-  const response = NextResponse.redirect(
-    new URL("/admin/login", process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"),
-  )
+  const cookieStore = await cookies()
+  cookieStore.delete("admin-session")
 
-  // Clear the auth cookie
-  response.cookies.set("admin-auth", "", {
-    expires: new Date(0),
-    path: "/",
-  })
-
-  return response
+  return NextResponse.redirect(new URL("/admin/login", process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"))
 }
 
 export async function POST() {
-  const response = NextResponse.redirect(
-    new URL("/admin/login", process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"),
-  )
+  const cookieStore = await cookies()
+  cookieStore.delete("admin-session")
 
-  // Clear the auth cookie
-  response.cookies.set("admin-auth", "", {
-    expires: new Date(0),
-    path: "/",
-  })
-
-  return response
+  return NextResponse.redirect(new URL("/admin/login", process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"))
 }

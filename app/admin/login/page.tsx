@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Loader2, Lock, User } from "lucide-react"
+import { Loader2, Lock, User, AlertCircle } from "lucide-react"
 
 export default function LoginPage() {
   const [username, setUsername] = useState("")
@@ -23,6 +23,8 @@ export default function LoginPage() {
     setIsLoading(true)
     setError("")
 
+    console.log("Submitting login form:", { username, password }) // Debug
+
     try {
       const response = await fetch("/api/admin/login", {
         method: "POST",
@@ -32,15 +34,20 @@ export default function LoginPage() {
         body: JSON.stringify({ username, password }),
       })
 
+      console.log("Response status:", response.status) // Debug
+
       const data = await response.json()
+      console.log("Response data:", data) // Debug
 
       if (response.ok && data.success) {
-        router.push("/admin")
-        router.refresh()
+        console.log("Login successful, redirecting...") // Debug
+        // Force a hard redirect
+        window.location.href = "/admin"
       } else {
         setError(data.error || "Error al iniciar sesión")
       }
     } catch (error) {
+      console.error("Fetch error:", error) // Debug
       setError("Error de conexión")
     } finally {
       setIsLoading(false)
@@ -48,23 +55,28 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-green-50 p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <div className="flex items-center justify-center mb-4">
-            <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-green-600 rounded-full flex items-center justify-center">
-              <Lock className="w-6 h-6 text-white" />
-            </div>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#039b9e]/10 to-slate-100 p-4">
+      <Card className="w-full max-w-md shadow-xl">
+        <CardHeader className="text-center space-y-4">
+          <div className="w-16 h-16 bg-[#039b9e] rounded-full flex items-center justify-center mx-auto">
+            <Lock className="h-8 w-8 text-white" />
           </div>
-          <CardTitle className="text-2xl text-center">Panel de Administración</CardTitle>
-          <CardDescription className="text-center">Ingresa tus credenciales para acceder al sistema</CardDescription>
+          <CardTitle className="text-2xl font-bold text-slate-800">Panel de Administración</CardTitle>
+          <CardDescription className="text-slate-600">Escuela Municipal Campos Deportivos</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-6">
+          {error && (
+            <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="username">Usuario</Label>
               <div className="relative">
-                <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                <User className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
                 <Input
                   id="username"
                   type="text"
@@ -80,7 +92,7 @@ export default function LoginPage() {
             <div className="space-y-2">
               <Label htmlFor="password">Contraseña</Label>
               <div className="relative">
-                <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                <Lock className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
                 <Input
                   id="password"
                   type="password"
@@ -93,12 +105,7 @@ export default function LoginPage() {
                 />
               </div>
             </div>
-            {error && (
-              <Alert variant="destructive">
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button type="submit" className="w-full bg-[#039b9e] hover:bg-[#028a8e]" disabled={isLoading}>
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -109,16 +116,18 @@ export default function LoginPage() {
               )}
             </Button>
           </form>
-          <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-            <p className="text-sm text-gray-600 text-center">
-              <strong>Credenciales de prueba:</strong>
-            </p>
-            <p className="text-sm text-gray-800 text-center mt-1">
-              Usuario: <code className="bg-gray-200 px-1 rounded">AdminNicolas</code>
-            </p>
-            <p className="text-sm text-gray-800 text-center">
-              Contraseña: <code className="bg-gray-200 px-1 rounded">latorre</code>
-            </p>
+
+          <div className="text-center text-xs text-slate-400 space-y-1">
+            <p>Acceso restringido solo para personal autorizado</p>
+            <div className="bg-slate-50 p-3 rounded-lg">
+              <p className="font-medium text-slate-600">Credenciales de prueba:</p>
+              <p>
+                Usuario: <code className="bg-slate-200 px-1 rounded">AdminNicolas</code>
+              </p>
+              <p>
+                Contraseña: <code className="bg-slate-200 px-1 rounded">latorre</code>
+              </p>
+            </div>
           </div>
         </CardContent>
       </Card>
