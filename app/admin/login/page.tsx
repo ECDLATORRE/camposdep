@@ -17,13 +17,18 @@ export default function LoginPage() {
     setLoading(true)
     setError("")
 
-    const result = await loginAction(formData)
+    try {
+      const result = await loginAction(formData)
 
-    if (result?.error) {
-      setError(result.error)
+      if (result?.error) {
+        setError(result.error)
+        setLoading(false)
+      }
+      // Si no hay error, el redirect se maneja en la server action
+    } catch (err) {
+      setError("Error al iniciar sesión")
+      setLoading(false)
     }
-
-    setLoading(false)
   }
 
   return (
@@ -83,6 +88,7 @@ export default function LoginPage() {
 
           <div className="text-center text-xs text-slate-400">
             <p>Acceso restringido solo para personal autorizado</p>
+            <p className="mt-2">Usuario: AdminNicolas | Contraseña: latorre</p>
           </div>
         </CardContent>
       </Card>
