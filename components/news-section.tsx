@@ -23,7 +23,8 @@ const newsData = {
     {
       id: "2",
       title: "Inicio de año escolar 2025",
-      excerpt: "Información importante para el inicio del nuevo año académico.",
+      excerpt:
+        "Información importante para el inicio del nuevo año académico. Todos los estudiantes deben presentarse el día 06 de marzo.",
       image: "/images/escuela-exterior.jpg",
       author: "Dirección",
       date: "6 Mar 2025",
@@ -34,7 +35,8 @@ const newsData = {
     {
       id: "3",
       title: "Capacitación docente en nuevas metodologías",
-      excerpt: "Nuestros profesores participan en talleres de actualización pedagógica.",
+      excerpt:
+        "Nuestros profesores participan en talleres de actualización pedagógica para mejorar la calidad educativa.",
       image: "/images/patio-escuela-estudiantes.jpg",
       author: "UTP",
       date: "15 Feb 2025",
@@ -47,7 +49,7 @@ const newsData = {
       title: "Período de matrículas abiertas",
       excerpt:
         "El proceso de matrícula para nuevos estudiantes estará abierto desde el 05 de marzo hasta el 30 de marzo.",
-      image: "/images/escuela-exterior.jpg",
+      image: "/images/logo-oficial.png",
       author: "Secretaría",
       date: "5 Mar 2025",
       category: "Apoderados",
@@ -60,7 +62,7 @@ const newsData = {
       excerpt: "Gran celebración de nuestra comunidad educativa con actividades para toda la familia.",
       image: "/images/evento-comunidad.png",
       author: "Dirección",
-      date: "20 Feb 2025",
+      date: "20 Mar 2025",
       category: "Comunidad",
     },
   ],
@@ -68,7 +70,7 @@ const newsData = {
     {
       id: "6",
       title: "Campeonato de básquetbol escolar",
-      excerpt: "Nuestro equipo de básquetbol se prepara para el campeonato regional.",
+      excerpt: "Nuestro equipo de básquetbol se prepara para el campeonato regional con entrenamientos intensivos.",
       image: "/images/basket.jpg",
       author: "Educación Física",
       date: "10 Mar 2025",
@@ -77,7 +79,7 @@ const newsData = {
   ],
 }
 
-const tabs = [
+const categories = [
   { id: "estudiantes", label: "Estudiantes", color: "bg-blue-500" },
   { id: "profesores", label: "Profesores", color: "bg-green-500" },
   { id: "apoderados", label: "Apoderados", color: "bg-purple-500" },
@@ -86,83 +88,89 @@ const tabs = [
 ]
 
 export function NewsSection() {
-  const [activeTab, setActiveTab] = useState("estudiantes")
+  const [activeCategory, setActiveCategory] = useState("estudiantes")
+
+  const currentNews = newsData[activeCategory as keyof typeof newsData] || []
 
   return (
-    <section className="py-20 bg-gradient-to-br from-slate-50 to-white relative overflow-hidden">
+    <section className="py-16 bg-gradient-to-br from-slate-50 to-white relative overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-[#039b9e]/5 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-[#039b9e]/5 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <Sparkles className="absolute top-20 right-20 h-6 w-6 text-[#039b9e]/20 animate-bounce" />
-        <Sparkles className="absolute bottom-20 left-20 h-4 w-4 text-[#039b9e]/30 animate-bounce delay-500" />
+        <div className="absolute -top-4 -right-4 w-72 h-72 bg-[#039b9e]/5 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute -bottom-4 -left-4 w-72 h-72 bg-[#039b9e]/5 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <Sparkles className="absolute top-20 right-20 text-[#039b9e]/20 w-6 h-6 animate-bounce" />
+        <Sparkles className="absolute bottom-20 left-20 text-[#039b9e]/20 w-4 h-4 animate-bounce delay-500" />
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-slate-800 mb-4">
-            Últimas <span className="text-[#039b9e]">Noticias</span>
-          </h2>
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-bold text-slate-800 mb-4">Últimas Noticias</h2>
           <p className="text-xl text-slate-600 max-w-2xl mx-auto">
             Mantente informado sobre las últimas novedades de nuestra comunidad educativa
           </p>
         </div>
 
-        {/* Tabs */}
-        <div className="flex flex-wrap justify-center gap-2 mb-12">
-          {tabs.map((tab) => (
+        {/* Category Tabs */}
+        <div className="flex flex-wrap justify-center gap-2 mb-8">
+          {categories.map((category) => (
             <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${
-                activeTab === tab.id
-                  ? `${tab.color} text-white shadow-lg scale-105`
-                  : "bg-white text-slate-600 hover:bg-slate-100 shadow-md hover:shadow-lg"
+              key={category.id}
+              onClick={() => setActiveCategory(category.id)}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                activeCategory === category.id
+                  ? `${category.color} text-white shadow-lg scale-105`
+                  : "bg-white text-slate-600 hover:bg-slate-100 border border-slate-200"
               }`}
             >
-              {tab.label}
+              {category.label}
             </button>
           ))}
         </div>
 
         {/* News Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-          {newsData[activeTab as keyof typeof newsData]?.map((news) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          {currentNews.map((article, index) => (
             <Card
-              key={news.id}
-              className="group hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 bg-white/80 backdrop-blur-sm border-0 shadow-lg"
+              key={article.id}
+              className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 bg-white/80 backdrop-blur-sm border-0 shadow-lg"
+              style={{ animationDelay: `${index * 100}ms` }}
             >
               <div className="relative overflow-hidden rounded-t-lg">
                 <Image
-                  src={news.image || "/placeholder.svg"}
-                  alt={news.title}
+                  src={article.image || "/placeholder.svg"}
+                  alt={article.title}
                   width={400}
-                  height={250}
+                  height={200}
                   className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
                 />
                 <div className="absolute top-4 left-4">
-                  <Badge className="bg-[#039b9e] hover:bg-[#028a8e] text-white">{news.category}</Badge>
+                  <Badge className={`${categories.find((c) => c.id === activeCategory)?.color} text-white`}>
+                    {article.category}
+                  </Badge>
                 </div>
               </div>
               <CardContent className="p-6">
-                <h3 className="font-bold text-lg text-slate-800 mb-3 group-hover:text-[#039b9e] transition-colors line-clamp-2">
-                  {news.title}
+                <h3 className="font-bold text-lg text-slate-800 mb-2 group-hover:text-[#039b9e] transition-colors line-clamp-2">
+                  {article.title}
                 </h3>
-                <p className="text-slate-600 mb-4 line-clamp-3">{news.excerpt}</p>
-                <div className="flex items-center justify-between text-sm text-slate-500 mb-4">
-                  <div className="flex items-center gap-2">
-                    <User className="h-4 w-4" />
-                    <span>{news.author}</span>
+                <p className="text-slate-600 text-sm mb-4 line-clamp-3">{article.excerpt}</p>
+                <div className="flex items-center justify-between text-xs text-slate-500 mb-4">
+                  <div className="flex items-center gap-1">
+                    <User className="w-3 h-3" />
+                    {article.author}
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Calendar className="h-4 w-4" />
-                    <span>{news.date}</span>
+                  <div className="flex items-center gap-1">
+                    <Calendar className="w-3 h-3" />
+                    {article.date}
                   </div>
                 </div>
-                <Link href={`/noticias/${news.id}`}>
-                  <Button className="w-full bg-[#039b9e] hover:bg-[#028a8e] text-white group-hover:shadow-lg transition-all duration-300">
+                <Link href={`/noticias/${article.id}`}>
+                  <Button
+                    variant="ghost"
+                    className="w-full group-hover:bg-[#039b9e] group-hover:text-white transition-all duration-300"
+                  >
                     Leer más
-                    <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </Link>
               </CardContent>
@@ -170,15 +178,15 @@ export function NewsSection() {
           ))}
         </div>
 
-        {/* Ver todas las noticias button */}
+        {/* View All Button */}
         <div className="text-center">
           <Link href="/noticias">
             <Button
               size="lg"
-              className="bg-gradient-to-r from-[#039b9e] to-[#028a8e] hover:from-[#028a8e] hover:to-[#027a7e] text-white px-8 py-4 rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
+              className="bg-gradient-to-r from-[#039b9e] to-[#028a8e] hover:from-[#028a8e] hover:to-[#027a7e] text-white px-8 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
             >
               Ver todas las noticias
-              <ArrowRight className="ml-2 h-5 w-5" />
+              <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
           </Link>
         </div>

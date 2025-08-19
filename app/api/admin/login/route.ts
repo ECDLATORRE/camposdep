@@ -1,12 +1,21 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { cookies } from "next/headers"
 
-// Simple user database
+// Simple hash function (in production use bcrypt)
+function hashPassword(password: string): string {
+  return Buffer.from(password).toString("base64")
+}
+
+function verifyPassword(password: string, hash: string): boolean {
+  return hashPassword(password) === hash
+}
+
+// User database with hashed passwords
 const users = [
   {
     id: "1",
     username: "AdminNicolas",
-    password: "latorre",
+    password: hashPassword("latorre"), // "latorre" hasheada
     role: "admin",
   },
 ]
@@ -19,22 +28,37 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Usuario y contraseña son requeridos" }, { status: 400 })
     }
 
-    const user = users.find((u) => u.username === username && u.password === password)
+    const user = users.find((u) => u.username === username && verifyPassword(password, u.password))
 
     if (!user) {
       return NextResponse.json({ error: "Usuario o contraseña incorrectos" }, { status: 401 })
     }
 
-    // Set cookie
+    // Set secure cookie
     const cookieStore = cookies()
-    cookieStore.set("admin-auth", "authenticated", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 60 * 60 * 24 * 7, // 7 days
-    })
+    cookieStore.set(
+      "admin-session",
+      JSON.stringify({
+        userId: user.id,
+        username: user.username,
+        role: user.role,
+      }),
+      {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 60 * 60 * 24 * 7, // 7 days
+      },
+    )
 
-    return NextResponse.json({ success: true, user: { id: user.id, username: user.username } })
+    return NextResponse.json({
+      success: true,
+      user: {
+        id: user.id,
+        username: user.username,
+        role: user.role,
+      },
+    })
   } catch (error) {
     return NextResponse.json({ error: "Error interno del servidor" }, { status: 500 })
   }

@@ -1,48 +1,62 @@
-import { redirect } from "next/navigation"
 import { cookies } from "next/headers"
+import { redirect } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Users, FileText, LogOut } from "lucide-react"
+import { Users, FileText, LogOut, Settings } from "lucide-react"
 import Link from "next/link"
 
-export default async function AdminDashboard() {
-  const cookieStore = await cookies()
-  const authCookie = cookieStore.get("admin-auth")
+async function getSession() {
+  const cookieStore = cookies()
+  const session = cookieStore.get("admin-session")
 
-  if (!authCookie || authCookie.value !== "authenticated") {
+  if (!session) return null
+
+  try {
+    return JSON.parse(session.value)
+  } catch {
+    return null
+  }
+}
+
+export default async function AdminDashboard() {
+  const session = await getSession()
+
+  if (!session) {
     redirect("/admin/login")
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+      <div className="container mx-auto px-4 py-8">
+        {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Panel de Administración</h1>
-            <p className="text-gray-600 mt-2">Gestiona el contenido de la escuela</p>
+            <h1 className="text-3xl font-bold text-slate-800">Panel de Administración</h1>
+            <p className="text-slate-600 mt-2">Bienvenido, {session.username}</p>
           </div>
-          <Link href="/admin/logout">
-            <Button variant="outline" className="flex items-center gap-2 bg-transparent">
+          <form action="/admin/logout" method="POST">
+            <Button variant="outline" type="submit" className="flex items-center gap-2 bg-transparent">
               <LogOut className="h-4 w-4" />
               Cerrar Sesión
             </Button>
-          </Link>
+          </form>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          {/* News Management */}
+        {/* Dashboard Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Gestión de Noticias */}
           <Card className="hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-[#039b9e]">
                 <FileText className="h-5 w-5" />
                 Gestión de Noticias
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-4">Administra las noticias y anuncios de la escuela</p>
+              <p className="text-slate-600 mb-4">Crear, editar y eliminar noticias del sitio web</p>
               <div className="space-y-2">
                 <Link href="/admin/noticias">
-                  <Button className="w-full">Ver Noticias</Button>
+                  <Button className="w-full bg-[#039b9e] hover:bg-[#028a8e]">Ver Noticias</Button>
                 </Link>
                 <Link href="/admin/noticias/nueva">
                   <Button variant="outline" className="w-full bg-transparent">
@@ -53,19 +67,19 @@ export default async function AdminDashboard() {
             </CardContent>
           </Card>
 
-          {/* User Management */}
+          {/* Gestión de Usuarios */}
           <Card className="hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-[#039b9e]">
                 <Users className="h-5 w-5" />
                 Gestión de Usuarios
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-4">Administra los usuarios del sistema</p>
+              <p className="text-slate-600 mb-4">Administrar usuarios del panel de control</p>
               <div className="space-y-2">
                 <Link href="/admin/usuarios">
-                  <Button className="w-full">Ver Usuarios</Button>
+                  <Button className="w-full bg-[#039b9e] hover:bg-[#028a8e]">Ver Usuarios</Button>
                 </Link>
                 <Link href="/admin/usuarios/nuevo">
                   <Button variant="outline" className="w-full bg-transparent">
@@ -75,26 +89,42 @@ export default async function AdminDashboard() {
               </div>
             </CardContent>
           </Card>
+
+          {/* Configuración */}
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-[#039b9e]">
+                <Settings className="h-5 w-5" />
+                Configuración
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-slate-600 mb-4">Configuración general del sitio web</p>
+              <Button variant="outline" className="w-full bg-transparent" disabled>
+                Próximamente
+              </Button>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Quick Stats */}
-        <div className="mt-8 grid md:grid-cols-3 gap-4">
+        <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
           <Card>
-            <CardContent className="p-6">
-              <div className="text-2xl font-bold text-blue-600">12</div>
-              <p className="text-gray-600">Noticias Publicadas</p>
+            <CardContent className="p-6 text-center">
+              <div className="text-2xl font-bold text-[#039b9e]">3</div>
+              <div className="text-slate-600">Noticias Publicadas</div>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="p-6">
-              <div className="text-2xl font-bold text-green-600">3</div>
-              <p className="text-gray-600">Usuarios Activos</p>
+            <CardContent className="p-6 text-center">
+              <div className="text-2xl font-bold text-[#039b9e]">1</div>
+              <div className="text-slate-600">Usuarios Activos</div>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="p-6">
-              <div className="text-2xl font-bold text-purple-600">500+</div>
-              <p className="text-gray-600">Estudiantes</p>
+            <CardContent className="p-6 text-center">
+              <div className="text-2xl font-bold text-[#039b9e]">500+</div>
+              <div className="text-slate-600">Estudiantes</div>
             </CardContent>
           </Card>
         </div>
