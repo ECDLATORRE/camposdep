@@ -1,9 +1,13 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { cookies } from "next/headers"
+import { createHash } from "crypto"
 
-// Simple hash function (in production use bcrypt)
+// Secure hash function using SHA-256 with salt
 function hashPassword(password: string): string {
-  return Buffer.from(password).toString("base64")
+  const salt = "escuela-campos-deportivos-salt-2025"
+  return createHash("sha256")
+    .update(password + salt)
+    .digest("hex")
 }
 
 function verifyPassword(password: string, hash: string): boolean {
@@ -15,7 +19,7 @@ const users = [
   {
     id: "1",
     username: "AdminNicolas",
-    password: hashPassword("latorre"), // "latorre" hasheada
+    password: hashPassword("latorre"), // SHA-256 hash - NO se puede revertir
     role: "admin",
   },
 ]
