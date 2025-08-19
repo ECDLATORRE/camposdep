@@ -1,9 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, Sparkles, Instagram, ExternalLink } from "lucide-react"
+import { ArrowRight, Sparkles, Instagram } from "lucide-react"
 
 export function NewsSection() {
   const [isLoaded, setIsLoaded] = useState(false)
@@ -31,46 +30,6 @@ export function NewsSection() {
     }
   }, [])
 
-  // Posts de ejemplo - estos serían reemplazados por posts reales
-  const instagramPosts = [
-    {
-      id: "1",
-      url: "https://www.instagram.com/p/EXAMPLE1/",
-      fallbackImage: "/images/evento-comunidad.png",
-      caption: "Gran evento comunitario 2025! 🎉",
-    },
-    {
-      id: "2",
-      url: "https://www.instagram.com/p/EXAMPLE2/",
-      fallbackImage: "/images/basket.jpg",
-      caption: "Nuestro equipo de básquetbol 🏀",
-    },
-    {
-      id: "3",
-      url: "https://www.instagram.com/p/EXAMPLE3/",
-      fallbackImage: "/images/actividad-fisica.jpg",
-      caption: "Educación física al aire libre 🤸‍♀️",
-    },
-    {
-      id: "4",
-      url: "https://www.instagram.com/p/EXAMPLE4/",
-      fallbackImage: "/images/techo2.jpg",
-      caption: "Nuevas instalaciones completadas 🏗️",
-    },
-    {
-      id: "5",
-      url: "https://www.instagram.com/p/EXAMPLE5/",
-      fallbackImage: "/images/escuela-exterior.jpg",
-      caption: "Vista de nuestro establecimiento 🏫",
-    },
-    {
-      id: "6",
-      url: "https://www.instagram.com/p/EXAMPLE6/",
-      fallbackImage: "/images/patio-escuela-estudiantes.jpg",
-      caption: "Estudiantes en el recreo 👥",
-    },
-  ]
-
   return (
     <section className="py-20 bg-gradient-to-br from-[#039b9e]/10 via-[#028a8e]/5 to-[#039b9e]/10 relative overflow-hidden">
       {/* Animated background elements */}
@@ -91,271 +50,174 @@ export function NewsSection() {
           </p>
         </div>
 
-        {/* Instagram Feed Widget */}
-        <div className="mb-12">
-          <div className="text-center mb-8">
-            <h3 className="text-2xl font-bold text-slate-800 mb-4">Síguenos en Instagram</h3>
-            <p className="text-slate-600">@cdeportivostemuco</p>
-          </div>
-
-          {/* Widget de Instagram embebido */}
-          <div className="flex justify-center mb-8">
-            <div className="w-full max-w-md">
-              <blockquote
-                className="instagram-media"
-                data-instgrm-permalink="https://www.instagram.com/cdeportivostemuco/"
-                data-instgrm-version="14"
-                style={{
-                  background: "#FFF",
-                  border: "0",
-                  borderRadius: "3px",
-                  boxShadow: "0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15)",
-                  margin: "1px",
-                  maxWidth: "540px",
-                  minWidth: "326px",
-                  padding: "0",
-                  width: "99.375%",
-                }}
-              >
-                <div style={{ padding: "16px" }}>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                    }}
-                  >
-                    <div
-                      style={{
-                        backgroundColor: "#F4F4F4",
-                        borderRadius: "50%",
-                        flexGrow: "0",
-                        height: "40px",
-                        marginRight: "14px",
-                        width: "40px",
-                      }}
-                    ></div>
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        flexGrow: "1",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <div
-                        style={{
-                          backgroundColor: "#F4F4F4",
-                          borderRadius: "4px",
-                          flexGrow: "0",
-                          height: "14px",
-                          marginBottom: "6px",
-                          width: "100px",
-                        }}
-                      ></div>
-                      <div
-                        style={{
-                          backgroundColor: "#F4F4F4",
-                          borderRadius: "4px",
-                          flexGrow: "0",
-                          height: "14px",
-                          width: "60px",
-                        }}
-                      ></div>
-                    </div>
-                  </div>
-                  <div style={{ padding: "19% 0" }}></div>
-                  <div
-                    style={{
-                      display: "block",
-                      height: "50px",
-                      margin: "0 auto 12px",
-                      width: "50px",
-                    }}
-                  >
-                    <svg width="50px" height="50px" viewBox="0 0 60 60" version="1.1">
-                      <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-                        <g transform="translate(-511.000000, -20.000000)" fill="#000000">
-                          <g>
-                            <path d="M556.869,30.41 C554.814,30.41 553.148,32.076 553.148,34.131 C553.148,36.186 554.814,37.852 556.869,37.852 C558.924,37.852 560.59,36.186 560.59,34.131 C560.59,32.076 558.924,30.41 556.869,30.41 M541,60.657 C535.114,60.657 530.342,55.887 530.342,50 C530.342,44.114 535.114,39.342 541,39.342 C546.887,39.342 551.658,44.114 551.658,50 C551.658,55.887 546.887,60.657 541,60.657 M541,33.886 C532.1,33.886 524.886,41.1 524.886,50 C524.886,58.899 532.1,66.113 541,66.113 C549.9,66.113 557.115,58.899 557.115,50 C557.115,41.1 549.9,33.886 541,33.886 M565.378,62.101 C565.244,65.022 564.756,66.606 564.346,67.663 C563.803,69.06 563.154,70.057 562.106,71.106 C561.058,72.155 560.06,72.803 558.662,73.347 C557.607,73.757 556.021,74.244 553.102,74.378 C549.944,74.521 548.997,74.552 541,74.552 C533.003,74.552 532.056,74.521 528.898,74.378 C525.979,74.244 524.393,73.757 523.338,73.347 C521.94,72.803 520.942,72.155 519.894,71.106 C518.846,70.057 518.197,69.06 517.654,67.663 C517.244,66.606 516.755,65.022 516.623,62.101 C516.479,58.943 516.448,57.996 516.448,50 C516.448,42.003 516.479,41.056 516.623,37.899 C516.755,34.978 517.244,33.391 517.654,32.338 C518.197,30.938 518.846,29.942 519.894,28.894 C520.942,27.846 521.94,27.196 523.338,26.654 C524.393,26.244 525.979,25.756 528.898,25.623 C532.057,25.479 533.004,25.448 541,25.448 C548.997,25.448 549.943,25.479 553.102,25.623 C556.021,25.756 557.607,26.244 558.662,26.654 C560.06,27.196 561.058,27.846 562.106,28.894 C563.154,29.942 563.803,30.938 564.346,32.338 C564.756,33.391 565.244,34.978 565.378,37.899 C565.522,41.056 565.552,42.003 565.552,50 C565.552,57.996 565.522,58.943 565.378,62.101 M570.82,37.631 C570.674,34.438 570.167,32.258 569.425,30.349 C568.659,28.377 567.633,26.702 565.965,25.035 C564.297,23.368 562.623,22.342 560.652,21.575 C558.743,20.834 556.562,20.326 553.369,20.18 C550.169,20.033 549.148,20 541,20 C532.853,20 531.831,20.033 528.631,20.18 C525.438,20.326 523.257,20.834 521.349,21.575 C519.376,22.342 517.703,23.368 516.035,25.035 C514.368,26.702 513.342,28.377 512.574,30.349 C511.834,32.258 511.326,34.438 511.181,37.631 C511.035,40.831 511,41.851 511,50 C511,58.147 511.035,59.17 511.181,62.369 C511.326,65.562 511.834,67.743 512.574,69.651 C513.342,71.625 514.368,73.296 516.035,74.965 C517.703,76.634 519.376,77.658 521.349,78.425 C523.257,79.167 525.438,79.673 528.631,79.82 C531.831,79.965 532.853,80.001 541,80.001 C549.148,80.001 550.169,79.965 553.369,79.82 C556.562,79.673 558.743,79.167 560.652,78.425 C562.623,77.658 564.297,76.634 565.965,74.965 C567.633,73.296 568.659,71.625 569.425,69.651 C570.167,67.743 570.674,65.562 570.82,62.369 C570.966,59.17 571,58.147 571,50 C571,41.851 570.966,40.831 570.82,37.631"></path>
-                          </g>
-                        </g>
-                      </g>
-                    </svg>
-                  </div>
-                  <div style={{ paddingTop: "8px" }}>
-                    <div
-                      style={{
-                        color: "#3897f0",
-                        fontFamily: "Arial,sans-serif",
-                        fontSize: "14px",
-                        fontStyle: "normal",
-                        fontWeight: "550",
-                        lineHeight: "18px",
-                      }}
-                    >
-                      Ver esta publicación en Instagram
-                    </div>
-                  </div>
-                  <div style={{ padding: "12.5% 0" }}></div>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      marginBottom: "14px",
-                      alignItems: "center",
-                    }}
-                  >
-                    <div>
-                      <div
-                        style={{
-                          backgroundColor: "#F4F4F4",
-                          borderRadius: "50%",
-                          height: "12.5px",
-                          width: "12.5px",
-                          transform: "translateX(0px) translateY(7px)",
-                        }}
-                      ></div>
-                      <div
-                        style={{
-                          backgroundColor: "#F4F4F4",
-                          height: "12.5px",
-                          transform: "rotate(-45deg) translateX(3px) translateY(1px)",
-                          width: "12.5px",
-                          flexGrow: "0",
-                          marginRight: "14px",
-                          marginLeft: "2px",
-                        }}
-                      ></div>
-                      <div
-                        style={{
-                          backgroundColor: "#F4F4F4",
-                          borderRadius: "50%",
-                          height: "12.5px",
-                          width: "12.5px",
-                          transform: "translateX(9px) translateY(-18px)",
-                        }}
-                      ></div>
-                    </div>
-                    <div style={{ marginLeft: "8px" }}>
-                      <div
-                        style={{
-                          backgroundColor: "#F4F4F4",
-                          borderRadius: "50%",
-                          flexGrow: "0",
-                          height: "20px",
-                          width: "20px",
-                        }}
-                      ></div>
-                      <div
-                        style={{
-                          width: "0",
-                          height: "0",
-                          borderTop: "2px solid transparent",
-                          borderLeft: "6px solid #f4f4f4",
-                          borderBottom: "2px solid transparent",
-                          transform: "translateX(16px) translateY(-4px) rotate(30deg)",
-                        }}
-                      ></div>
-                    </div>
-                    <div style={{ marginLeft: "auto" }}>
-                      <div
-                        style={{
-                          width: "0px",
-                          borderTop: "8px solid #F4F4F4",
-                          borderRight: "8px solid transparent",
-                          transform: "translateY(16px)",
-                        }}
-                      ></div>
-                      <div
-                        style={{
-                          backgroundColor: "#F4F4F4",
-                          flexGrow: "0",
-                          height: "12px",
-                          width: "16px",
-                          transform: "translateY(-4px)",
-                        }}
-                      ></div>
-                      <div
-                        style={{
-                          width: "0",
-                          height: "0",
-                          borderTop: "8px solid #F4F4F4",
-                          borderLeft: "8px solid transparent",
-                          transform: "translateY(-4px) translateX(8px)",
-                        }}
-                      ></div>
-                    </div>
-                  </div>
-                </div>
-                <a
-                  href="https://www.instagram.com/cdeportivostemuco/"
-                  style={{
-                    color: "#c9c8cd",
-                    fontFamily: "Arial,sans-serif",
-                    fontSize: "14px",
-                    fontStyle: "normal",
-                    fontWeight: "normal",
-                    lineHeight: "17px",
-                    textDecoration: "none",
-                  }}
+        {/* Instagram Posts Grid */}
+        <div className="grid md:grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+          {/* Post 1 */}
+          <div className="flex justify-center animate-fade-in-up" style={{ animationDelay: "0ms" }}>
+            <blockquote 
+              className="instagram-media" 
+              data-instgrm-captioned 
+              data-instgrm-permalink="https://www.instagram.com/reel/DNg3kvStIX9/?utm_source=ig_embed&utm_campaign=loading" 
+              data-instgrm-version="14" 
+              style={{ 
+                background: "#FFF", 
+                border: "0", 
+                borderRadius: "3px", 
+                boxShadow: "0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15)", 
+                margin: "1px", 
+                maxWidth: "540px", 
+                minWidth: "326px", 
+                padding: "0", 
+                width: "99.375%"
+              }}
+            >
+              <div style={{ padding: "16px" }}>
+                <a 
+                  href="https://www.instagram.com/reel/DNg3kvStIX9/?utm_source=ig_embed&utm_campaign=loading" 
+                  style={{ 
+                    background: "#FFFFFF", 
+                    lineHeight: "0", 
+                    padding: "0 0", 
+                    textAlign: "center", 
+                    textDecoration: "none", 
+                    width: "100%" 
+                  }} 
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Una publicación compartida de Escuela Campos Deportivos (@cdeportivostemuco)
-                </a>
-              </blockquote>
-            </div>
-          </div>
-        </div>
-
-        {/* Fallback content while Instagram loads */}
-        {!isLoaded && (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-            {instagramPosts.slice(0, 6).map((post, index) => (
-              <Card
-                key={post.id}
-                className="group hover:shadow-2xl transition-all duration-500 border-0 shadow-lg overflow-hidden hover:-translate-y-2 animate-fade-in-up cursor-pointer"
-                style={{ animationDelay: `${index * 150}ms` }}
-              >
-                <div className="relative overflow-hidden">
-                  <img
-                    src={post.fallbackImage || "/placeholder.svg"}
-                    alt={post.caption}
-                    className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  <div className="absolute top-4 left-4 bg-[#E4405F] text-white px-3 py-1 rounded-lg text-sm font-semibold transform group-hover:scale-110 transition-transform duration-300 shadow-lg flex items-center gap-1">
-                    <Instagram className="h-3 w-3" />
-                    Post
+                  <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+                    <div style={{ backgroundColor: "#F4F4F4", borderRadius: "50%", flexGrow: "0", height: "40px", marginRight: "14px", width: "40px" }}></div>
+                    <div style={{ display: "flex", flexDirection: "column", flexGrow: "1", justifyContent: "center" }}>
+                      <div style={{ backgroundColor: "#F4F4F4", borderRadius: "4px", flexGrow: "0", height: "14px", marginBottom: "6px", width: "100px" }}></div>
+                      <div style={{ backgroundColor: "#F4F4F4", borderRadius: "4px", flexGrow: "0", height: "14px", width: "60px" }}></div>
+                    </div>
                   </div>
-                </div>
-                <CardContent className="p-6 space-y-4">
-                  <p className="text-slate-700 leading-relaxed line-clamp-2">{post.caption}</p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-slate-500">@cdeportivostemuco</span>
-                    <ExternalLink className="h-4 w-4 text-slate-400" />
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                  <div style={{ padding: "19% 0" }}></div>
+                  <div style={{ display: "block", height: "50px", margin: "0 auto 12px", width: "50px" }}>
+                    <svg width="50px" height="50px" viewBox="0 0 60 60" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                      <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+                        <g transform="translate(-511.000000, -20.000000)" fill="#000000">
+                          <g>
+                            <path d="M556.869,30.41 C554.814,30.41 553.148,32.076 553.148,34.131 C553.148,36.186 554.814,37.852 556.869,37.852 C558.924,37.852 560.59,36.186 560.59,34.131 C560.59,32.076 558.924,30.41 556.869,30.41 M541,60.657 C535.114,60.657 530.342,55.887 530.342,50 C530.342,44.114 535.114,39.342 541,39.342 C546.887,39.342 551.658,44.114 551.658,50 C551.658,55.887 546.887,60.657 541,60.657 M541,33.886 C532.1,33.886 524.886,41.1 524.886,50 C524.886,58.899 532.1,66.113 541,66.113 C549.9,66.113 557.115,58.899 557.115,50 C557.115,41.1 549.9,33.886 541,33.886 M565.378,62.101 C565.244,65.022 564.756,66.606 564.346,67.663 C563.803,69.06 563.154,70.057 562.106,71.106 C561.058,72.155 560.06,72.803 558.662,73.347 C557.607,73.757 556.021,74.244 553.102,74.378 C549.944,74.521 548.997,74.552 541,74.552 C533.003,74.552 532.056,74.521 528.898,74.378 C525.979,74.244 524.393,73.757 523.338,73.347 C521.94,72.803 520.942,72.155 519.894,71.106 C518.846,70.057 518.197,69.06 517.654,67.663 C517.244,66.606 516.755,65.022 516.623,62.101 C516.479,58.943 516.448,57.996 516.448,50 C516.448,42.003 516.479,41.056 516.623,37.899 C516.755,34.978 517.244,33.391 517.654,32.338 C518.197,30.938 518.846,29.942 519.894,28.894 C520.942,27.846 521.94,27.196 523.338,26.654 C524.393,26.244 525.979,25.756 528.898,25.623 C532.057,25.479 533.004,25.448 541,25.448 C548.997,25.448 549.943,25.479 553.102,25.623 C556.021,25.756 557.607,26.244 558.662,26.654 C560.06,27.196 561.058,27.846 562.106,28.894 C563.154,29.942 563.803,30.938 564.346,32.338 C564.756,33.391 565.244,34.978 565.378,37.899 C565.522,41.056 565.552,42.003 565.552,50 C565.552,57.996 565.522,58.943 565.378,62.101 M570.82,37.631 C570.674,34.438 570.167,32.258 569.425,30.349 C568.659,28.377 567.633,26.702 565.965,25.035 C564.297,23.368 562.623,22.342 560.652,21.575 C558.743,20.834 556.562,20.326 553.369,20.18 C550.169,20.033 549.148,20 541,20 C532.853,20 531.831,20.033 528.631,20.18 C525.438,20.326 523.257,20.834 521.349,21.575 C519.376,22.342 517.703,23.368 516.035,25.035 C514.368,26.702 513.342,28.377 512.574,30.349 C511.834,32.258 511.326,34.438 511.181,37.631 C511.035,40.831 511,41.851 511,50 C511,58.147 511.035,59.17 511.181,62.369 C511.326,65.562 511.834,67.743 512.574,69.651 C513.342,71.625 514.368,73.296 516.035,74.965 C517.703,76.634 519.376,77.658 521.349,78.425 C523.257,79.167 525.438,79.673 528.631,79.82 C531.831,79.965 532.853,80.001 541,80.001 C549.148,80.001 550.169,79.965 553.369,79.82 C556.562,79.673 558.743,79.167 560.652,78.425 C562.623,77.658 564.297,76.634 565.965,74.965 C567.633,73.296 568.659,71.625 569.425,69.651 C570.167,67.743 570.674,65.562 570.82,62.369"></a>
+              </div>
+            </blockquote>
           </div>
-        )}
-
-        {/* Ver más en Instagram button */}
-        <div className="text-center mt-12 animate-fade-in delay-1000">
-          <a href="https://www.instagram.com/cdeportivostemuco/" target="_blank" rel="noopener noreferrer">
-            <Button
-              size="lg"
-              className="bg-gradient-to-r from-[#E4405F] to-[#C13584] hover:from-[#C13584] hover:to-[#E4405F] text-white transition-all duration-300 hover:scale-105 hover:shadow-lg"
+          {/* Post 2 */}
+          <div className="flex justify-center animate-fade-in-up" style={{ animationDelay: "150ms" }}>
+            <blockquote 
+              className="instagram-media" 
+              data-instgrm-captioned 
+              data-instgrm-permalink="https://www.instagram.com/p/Bv4Z7ZpAAGF/?utm_source=ig_embed&utm_campaign=loading" 
+              data-instgrm-version="14" 
+              style={{ 
+                background: "#FFF", 
+                border: "0", 
+                borderRadius: "3px", 
+                boxShadow: "0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15)", 
+                margin: "1px", 
+                maxWidth: "540px", 
+                minWidth: "326px", 
+                padding: "0", 
+                width: "99.375%"
+              }}
             >
-              <Instagram className="mr-2 h-5 w-5" />
-              Ver más noticias
-              <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
-            </Button>
-          </a>
+              <div style={{ padding: "16px" }}>
+                <a 
+                  href="https://www.instagram.com/p/Bv4Z7ZpAAGF/?utm_source=ig_embed&utm_campaign=loading" 
+                  style={{ 
+                    background: "#FFFFFF", 
+                    lineHeight: "0", 
+                    padding: "0 0", 
+                    textAlign: "center", 
+                    textDecoration: "none", 
+                    width: "100%" 
+                  }} 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+                    <div style={{ backgroundColor: "#F4F4F4", borderRadius: "50%", flexGrow: "0", height: "40px", marginRight: "14px", width: "40px" }}></div>
+                    <div style={{ display: "flex", flexDirection: "column", flexGrow: "1", justifyContent: "center" }}>
+                      <div style={{ backgroundColor: "#F4F4F4", borderRadius: "4px", flexGrow: "0", height: "14px", marginBottom: "6px", width: "100px" }}></div>
+                      <div style={{ backgroundColor: "#F4F4F4", borderRadius: "4px", flexGrow: "0", height: "14px", width: "60px" }}></div>
+                    </div>
+                  </div>
+                  <div style={{ padding: "19% 0" }}></div>
+                  <div style={{ display: "block", height: "50px", margin: "0 auto 12px", width: "50px" }}>
+                    <svg width="50px" height="50px" viewBox="0 0 60 60" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                      <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+                        <g transform="translate(-511.000000, -20.000000)" fill="#000000">
+                          <g>
+                            <path d="M556.869,30.41 C554.814,30.41 553.148,32.076 553.148,34.131 C553.148,36.186 554.814,37.852 556.869,37.852 C558.924,37.852 560.59,36.186 560.59,34.131 C560.59,32.076 558.924,30.41 556.869,30.41 M541,60.657 C535.114,60.657 530.342,55.887 530.342,50 C530.342,44.114 535.114,39.342 541,39.342 C546.887,39.342 551.658,44.114 551.658,50 C551.658,55.887 546.887,60.657 541,60.657 M541,33.886 C532.1,33.886 524.886,41.1 524.886,50 C524.886,58.899 532.1,66.113 541,66.113 C549.9,66.113 557.115,58.899 557.115,50 C557.115,41.1 549.9,33.886 541,33.886 M565.378,62.101 C565.244,65.022 564.756,66.606 564.346,67.663 C563.803,69.06 563.154,70.057 562.106,71.106 C561.058,72.155 560.06,72.803 558.662,73.347 C557.607,73.757 556.021,74.244 553.102,74.378 C549.944,74.521 548.997,74.552 541,74.552 C533.003,74.552 532.056,74.521 528.898,74.378 C525.979,74.244 524.393,73.757 523.338,73.347 C521.94,72.803 520.942,72.155 519.894,71.106 C518.846,70.057 518.197,69.06 517.654,67.663 C517.244,66.606 516.755,65.022 516.623,62.101 C516.479,58.943 516.448,57.996 516.448,50 C516.448,42.003 516.479,41.056 516.623,37.899 C516.755,34.978 517.244,33.391 517.654,32.338 C518.197,30.938 518.846,29.942 519.894,28.894 C520.942,27.846 521.94,27.196 523.338,26.654 C524.393,26.244 525.979,25.756 528.898,25.623 C532.057,25.479 533.004,25.448 541,25.448 C548.997,25.448 549.943,25.479 553.102,25.623 C556.021,25.756 557.607,26.244 558.662,26.654 C560.06,27.196 561.058,27.846 562.106,28.894 C563.154,29.942 563.803,30.938 564.346,32.338 C564.756,33.391 565.244,34.978 565.378,37.899 C565.522,41.056 565.552,42.003 565.552,50 C565.552,57.996 565.522,58.943 565.378,62.101 M570.82,37.631 C570.674,34.438 570.167,32.258 569.425,30.349 C568.659,28.377 567.633,26.702 565.965,25.035 C564.297,23.368 562.623,22.342 560.652,21.575 C558.743,20.834 556.562,20.326 553.369,20.18 C550.169,20.033 549.148,20 541,20 C532.853,20 531.831,20.033 528.631,20.18 C525.438,20.326 523.257,20.834 521.349,21.575 C519.376,22.342 517.703,23.368 516.035,25.035 C514.368,26.702 513.342,28.377 512.574,30.349 C511.834,32.258 511.326,34.438 511.181,37.631 C511.035,40.831 511,41.851 511,50 C511,58.147 511.035,59.17 511.181,62.369 C511.326,65.562 511.834,67.743 512.574,69.651 C513.342,71.625 514.368,73.296 516.035,74.965 C517.703,76.634 519.376,77.658 521.349,78.425 C523.257,79.167 525.438,79.673 528.631,79.82 C531.831,79.965 532.853,80.001 541,80.001 C549.148,80.001 550.169,79.965 553.369,79.82 C556.562,79.673 558.743,79.167 560.652,78.425 C562.623,77.658 564.297,76.634 565.965,74.965 C567.633,73.296 568.659,71.625 569.425,69.651 C570.167,67.743 570.674,65.562 570.82,62.369"></a>
+              </div>
+            </blockquote>
+          </div>
+          {/* Post 3 */}
+          <div className="flex justify-center animate-fade-in-up" style={{ animationDelay: "300ms" }}>
+            <blockquote 
+              className="instagram-media" 
+              data-instgrm-captioned 
+              data-instgrm-permalink="https://www.instagram.com/p/Bv4Z7ZpAAGF/?utm_source=ig_embed&utm_campaign=loading" 
+              data-instgrm-version="14" 
+              style={{ 
+                background: "#FFF", 
+                border: "0", 
+                borderRadius: "3px", 
+                boxShadow: "0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15)", 
+                margin: "1px", 
+                maxWidth: "540px", 
+                minWidth: "326px", 
+                padding: "0", 
+                width: "99.375%"
+              }}
+            >
+              <div style={{ padding: "16px" }}>
+                <a 
+                  href="https://www.instagram.com/p/Bv4Z7ZpAAGF/?utm_source=ig_embed&utm_campaign=loading" 
+                  style={{ 
+                    background: "#FFFFFF", 
+                    lineHeight: "0", 
+                    padding: "0 0", 
+                    textAlign: "center", 
+                    textDecoration: "none", 
+                    width: "100%" 
+                  }} 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+                    <div style={{ backgroundColor: "#F4F4F4", borderRadius: "50%", flexGrow: "0", height: "40px", marginRight: "14px", width: "40px" }}></div>
+                    <div style={{ display: "flex", flexDirection: "column", flexGrow: "1", justifyContent: "center" }}>
+                      <div style={{ backgroundColor: "#F4F4F4", borderRadius: "4px", flexGrow: "0", height: "14px", marginBottom: "6px", width: "100px" }}></div>
+                      <div style={{ backgroundColor: "#F4F4F4", borderRadius: "4px", flexGrow: "0", height: "14px", width: "60px" }}></div>
+                    </div>
+                  </div>
+                  <div style={{ padding: "19% 0" }}></div>
+                  <div style={{ display: "block", height: "50px", margin: "0 auto 12px", width: "50px" }}>
+                    <svg width="50px" height="50px" viewBox="0 0 60 60" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                      <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+                        <g transform="translate(-511.000000, -20.000000)" fill="#000000">
+                          <g>
+                            <path d="M556.869,30.41 C554.814,30.41 553.148,32.076 553.148,34.131 C553.148,36.186 554.814,37.852 556.869,37.852 C558.924,37.852 560.59,36.186 560.59,34.131 C560.59,32.076 558.924,30.41 556.869,30.41 M541,60.657 C535.114,60.657 530.342,55.887 530.342,50 C530.342,44.114 535.114,39.342 541,39.342 C546.887,39.342 551.658,44.114 551.658,50 C551.658,55.887 546.887,60.657 541,60.657 M541,33.886 C532.1,33.886 524.886,41.1 524.886,50 C524.886,58.899 532.1,66.113 541,66.113 C549.9,66.113 557.115,58.899 557.115,50 C557.115,41.1 549.9,33.886 541,33.886 M565.378,62.101 C565.244,65.022 564.756,66.606 564.346,67.663 C563.803,69.06 563.154,70.057 562.106,71.106 C561.058,72.155 560.06,72.803 558.662,73.347 C557.607,73.757 556.021,74.244 553.102,74.378 C549.944,74.521 548.997,74.552 541,74.552 C533.003,74.552 532.056,74.521 528.898,74.378 C525.979,74.244 524.393,73.757 523.338,73.347 C521.94,72.803 520.942,72.155 519.894,71.106 C518.846,70.057 518.197,69.06 517.654,67.663 C517.244,66.606 516.755,65.022 516.623,62.101 C516.479,58.943 516.448,57.996 516.448,50 C516.448,42.003 516.479,41.056 516.623,37.899 C516.755,34.978 517.244,33.391 517.654,32.338 C518.197,30.938 518.846,29.942 519.894,28.894 C520.942,27.846 521.94,27.196 523.338,26.654 C524.393,26.244 525.979,25.756 528.898,25.623 C532.057,25.479 533.004,25.448 541,25.448 C548.997,25.448 549.943,25.479 553.102,25.623 C556.021,25.756 557.607,26.244 558.662,26.654 C560.06,27.196 561.058,27.846 562.106,28.894 C563.154,29.942 563.803,30.938 564.346,32.338 C564.756,33.391 565.244,34.978 565.378,37.899 C565.522,41.056 565.552,42.003 565.552,50 C565.552,57.996 565.522,58.943 565.378,62.101 M570.82,37.631 C570.674,34.438 570.167,32.258 569.425,30.349 C568.659,28.377 567.633,26.702 565.965,25.035 C564.297,23.368 562.623,22.342 560.652,21.575 C558.743,20.834 556.562,20.326 553.369,20.18 C550.169,20.033 549.148,20 541,20 C532.853,20 531.831,20.033 528.631,20.18 C525.438,20.326 523.257,20.834 521.349,21.575 C519.376,22.342 517.703,23.368 516.035,25.035 C514.368,26.702 513.342,28.377 512.574,30.349 C511.834,32.258 511.326,34.438 511.181,37.631 C511.035,40.831 511,41.851 511,50 C511,58.147 511.035,59.17 511.181,62.369 C511.326,65.562 511.834,67.743 512.574,69.651 C513.342,71.625 514.368,73.296 516.035,74.965 C517.703,76.634 519.376,77.658 521.349,78.425 C523.257,79.167 525.438,79.673 528.631,79.82 C531.831,79.965 532.853,80.001 541,80.001 C549.148,80.001 550.169,79.965 553.369,79.82 C556.562,79.673 558.743,79.167 560.652,78.425 C562.623,77.658 564.297,76.634 565.965,74.965 C567.633,73.296 568.659,71.625 569.425,69.651 C570.167,67.743 570.674,65.562 570.82,62.369"></a>
+              </div>
+            </blockquote>
+          </div>
         </div>
       </div>
+
+      {/* Ver más en Instagram button */}
+      <div className="text-center mt-12 animate-fade-in delay-1000">
+        <a href="https://www.instagram.com/cdeportivostemuco/" target="_blank" rel="noopener noreferrer">
+          <Button
+            size="lg"
+            className="bg-gradient-to-r from-[#E4405F] to-[#C13584] hover:from-[#C13584] hover:to-[#E4405F] text-white transition-all duration-300 hover:scale-105 hover:shadow-lg"
+          >
+            <Instagram className="mr-2 h-5 w-5" />
+            Ver más noticias
+            <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
+          </Button>
+        </a>
+      </div>
     </section>
-  )
+  )\
 }
