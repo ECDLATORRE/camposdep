@@ -36,28 +36,34 @@ export function InterestSites() {
           <p className="text-lg text-slate-600 max-w-2xl mx-auto">Enlaces útiles para nuestra comunidad educativa</p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        <div className="space-y-4 max-w-4xl mx-auto">
           {interestSites.map((site, index) => {
             const IconComponent = site.icon
             return (
               <Card
                 key={index}
-                className="group hover:shadow-2xl transition-all duration-300 hover:scale-105 border-0 overflow-hidden"
+                className="group hover:shadow-xl transition-all duration-300 hover:scale-[1.02] border-0 overflow-hidden"
               >
                 <CardContent className="p-0">
                   <a href={site.url} target="_blank" rel="noopener noreferrer" className="block">
-                    <div className={`bg-gradient-to-br ${site.gradient} p-8 text-white relative overflow-hidden`}>
-                      <div className="absolute top-0 right-0 opacity-20">
-                        <IconComponent className="h-24 w-24" />
-                      </div>
-                      <div className="relative z-10">
-                        <IconComponent className="h-12 w-12 mb-4" />
-                        <h3 className="text-xl font-bold mb-2">{site.name}</h3>
-                        <p className="text-sm opacity-90 mb-4">{site.description}</p>
-                        <div className="flex items-center text-sm font-medium">
-                          <span>Visitar sitio</span>
-                          <ExternalLink className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                    <div className={`bg-gradient-to-r ${site.gradient} p-6 text-white relative overflow-hidden`}>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-4">
+                          <div className="bg-white/20 p-3 rounded-full">
+                            <IconComponent className="h-8 w-8" />
+                          </div>
+                          <div>
+                            <h3 className="text-xl font-bold mb-1">{site.name}</h3>
+                            <p className="text-sm opacity-90">{site.description}</p>
+                          </div>
                         </div>
+                        <div className="flex items-center space-x-2 text-sm font-medium">
+                          <span>Visitar sitio</span>
+                          <ExternalLink className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                        </div>
+                      </div>
+                      <div className="absolute top-0 right-0 opacity-10">
+                        <IconComponent className="h-20 w-20" />
                       </div>
                     </div>
                   </a>
