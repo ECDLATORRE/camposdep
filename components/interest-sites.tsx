@@ -1,68 +1,74 @@
-"use client"
-
+import Link from "next/link"
+import { ExternalLink, Globe, BookOpen, Users, GraduationCap } from "lucide-react"
+import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { ExternalLink } from "lucide-react"
 
 export function InterestSites() {
   const sites = [
     {
-      name: "MINEDUC",
-      description: "Ministerio de Educación de Chile",
+      name: "Ministerio de Educación",
+      description: "Portal oficial del MINEDUC Chile",
       url: "https://www.mineduc.cl/",
-      color: "bg-gradient-to-br from-blue-500 to-blue-600",
-    },
-    {
-      name: "JUNAEB",
-      description: "Junta Nacional de Auxilio Escolar y Becas",
-      url: "https://www.junaeb.cl/",
-      color: "bg-gradient-to-br from-green-500 to-green-600",
+      icon: GraduationCap,
+      gradient: "from-blue-500 to-blue-600",
     },
     {
       name: "Lirmi",
       description: "Plataforma Educativa Digital",
       url: "https://lms.lirmi.com/login",
-      color: "bg-gradient-to-br from-yellow-400 via-purple-500 to-cyan-400",
+      icon: BookOpen,
+      gradient: "from-yellow-400 via-purple-500 to-cyan-400",
     },
     {
-      name: "DAEM Temuco",
-      description: "Departamento de Administración de Educación Municipal",
-      url: "https://www.temuco.cl/",
-      color: "bg-gradient-to-br from-purple-500 to-purple-600",
+      name: "Superintendencia de Educación",
+      description: "Fiscalización y apoyo técnico-pedagógico",
+      url: "https://www.supereduc.cl/",
+      icon: Users,
+      gradient: "from-green-500 to-green-600",
+    },
+    {
+      name: "Agencia de Calidad",
+      description: "Evaluación y orientación del sistema educativo",
+      url: "https://www.agenciaeducacion.cl/",
+      icon: Globe,
+      gradient: "from-purple-500 to-purple-600",
     },
   ]
 
   return (
-    <section className="py-20 bg-gradient-to-br from-slate-50 to-blue-50">
+    <section className="py-16 bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl lg:text-4xl font-bold text-slate-800 mb-4">Sitios de Interés</h2>
-          <p className="text-xl text-slate-600">Enlaces útiles para nuestra comunidad educativa</p>
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-4">Sitios de Interés</h2>
+          <p className="text-lg text-slate-600 max-w-2xl mx-auto">Enlaces útiles para nuestra comunidad educativa</p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {sites.map((site, index) => (
-            <Card
-              key={index}
-              className="group hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 cursor-pointer border-0 overflow-hidden"
-            >
-              <a href={site.url} target="_blank" rel="noopener noreferrer" className="block">
-                <div className={`h-32 ${site.color} relative overflow-hidden`}>
-                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300"></div>
-                  <div className="absolute top-4 right-4">
-                    <ExternalLink className="h-6 w-6 text-white opacity-70 group-hover:opacity-100 transition-opacity duration-300" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {sites.map((site, index) => {
+            const IconComponent = site.icon
+            return (
+              <Card
+                key={index}
+                className="group hover:shadow-xl transition-all duration-300 border-0 shadow-lg overflow-hidden"
+              >
+                <CardContent className="p-0">
+                  <div className={`bg-gradient-to-br ${site.gradient} p-6 text-white`}>
+                    <IconComponent className="h-12 w-12 mb-4 group-hover:scale-110 transition-transform duration-300" />
+                    <h3 className="text-xl font-bold mb-2">{site.name}</h3>
+                    <p className="text-sm opacity-90 mb-4">{site.description}</p>
                   </div>
-                  <div className="absolute bottom-4 left-4">
-                    <h3 className="text-2xl font-bold text-white drop-shadow-lg">{site.name}</h3>
+                  <div className="p-4">
+                    <Button asChild className="w-full group-hover:bg-slate-800 transition-colors duration-300">
+                      <Link href={site.url} target="_blank" rel="noopener noreferrer">
+                        Visitar sitio
+                        <ExternalLink className="ml-2 h-4 w-4" />
+                      </Link>
+                    </Button>
                   </div>
-                </div>
-                <CardContent className="p-6">
-                  <p className="text-slate-600 group-hover:text-slate-800 transition-colors duration-300">
-                    {site.description}
-                  </p>
                 </CardContent>
-              </a>
-            </Card>
-          ))}
+              </Card>
+            )
+          })}
         </div>
       </div>
     </section>
